@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Recipe_Book.Models
 {
-    internal class Ingridient
+    public class Ingredient
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public ICollection<RecipeIngredients> RecipeIngredients { get; set; }
+
     }
 }
