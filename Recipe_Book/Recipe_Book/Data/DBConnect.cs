@@ -9,7 +9,7 @@ namespace Recipe_Book.Data
 
         public DbSet<Ingredient> Ingredients { get; set;}
 
-        public DbSet<RecipeIngredients> RecipeIngredients { get; set; }
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -20,13 +20,13 @@ namespace Recipe_Book.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .Entity<RecipeIngredients>()
+                .Entity<RecipeIngredient>()
                 .HasOne(ri => ri.Recipe)
                 .WithMany(r => r.RecipeIngredients)
                 .HasForeignKey(ri => ri.RecipeId);
 
             modelBuilder
-                .Entity<RecipeIngredients>()
+                .Entity<RecipeIngredient>()
                 .HasOne(ri => ri.Ingredient)
                 .WithMany(r => r.RecipeIngredients)
                 .HasForeignKey(ri => ri.IngredientId);

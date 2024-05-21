@@ -12,6 +12,6 @@ namespace Recipe_Book.Models
         public string Author { get; set; }
         public DateTime AddDate { get; set; }
         public string Category { get; set; }
-        public ICollection<RecipeIngredients> RecipeIngredients { get; set; }
+        public ICollection<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

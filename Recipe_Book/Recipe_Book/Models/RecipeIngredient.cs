@@ -3,7 +3,7 @@
 
 namespace Recipe_Book.Models
 {
-    public class RecipeIngredients
+    public class RecipeIngredient
     {
         public int Id { get; set; }
 
