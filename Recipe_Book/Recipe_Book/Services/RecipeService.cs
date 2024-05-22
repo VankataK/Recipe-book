@@ -26,6 +26,24 @@ namespace Recipe_Book.Services
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<List<Recipe>> GetRecipeByCategory(string category)
+        {
+            return await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .Where(r => r.Category == category)
+                .ToListAsync();
+        }
+
+        public async Task<List<Recipe>> GetRecipeByIngredient(string ingredient)
+        {
+            return await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .Where(r => r.Ingredients.Contains(ingredient))
+                .ToListAsync();
+        }
+
         public async Task AddRecipe(Recipe recipe, List<int> ingredientsIds, List<int> quantities, List<string> units)
         {
             recipe.AddDate = DateTime.Now;
