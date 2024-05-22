@@ -1,6 +1,7 @@
 ﻿using Recipe_Book.Services;
 using CustomPrint;
 using Recipe_Book.Models;
+using System.Threading.Channels;
 
 namespace Recipe_Book.Views
 {
@@ -13,7 +14,7 @@ namespace Recipe_Book.Views
             this.recipeService = recipeService;
         }
 
-        public async Task ShowMenu()
+        public void ShowMenu()
         {
             bool exit = false;
             int choice;
@@ -85,7 +86,9 @@ namespace Recipe_Book.Views
 
         private void AddNewRecipe()
         {
-            throw new NotImplementedException();
+            Recipe recipe = new Recipe("Burger", "Slagash pitkata i kufteto", "kufte, pitka, domat","Az","Osnovno");
+            recipeService.AddRecipe(recipe, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 100 }, new List<string> { "broika", "broika", "kilo" });
+
         }
 
         private void SearchRecipeByProduct()
@@ -98,15 +101,10 @@ namespace Recipe_Book.Views
             throw new NotImplementedException();
         }
 
-        private void ShowAllRecipes()
+        public void ShowAllRecipes()
         {
-            var recipesTask = recipeService.GetAllRecipes();
-            List<Recipe> recipes = new List<Recipe>();
-           
-            foreach (var recipe in recipes)
-            {
+            var list = recipeService.GetAllRecipes();
 
-            }
         }
 
         

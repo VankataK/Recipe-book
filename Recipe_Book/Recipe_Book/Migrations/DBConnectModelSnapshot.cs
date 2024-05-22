@@ -75,7 +75,7 @@ namespace Recipe_Book.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredients", b =>
+            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +105,7 @@ namespace Recipe_Book.Migrations
                     b.ToTable("RecipeIngredients");
                 });
 
-            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredients", b =>
+            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredient", b =>
                 {
                     b.HasOne("Recipe_Book.Models.Ingredient", "Ingredient")
                         .WithMany("RecipeIngredients")

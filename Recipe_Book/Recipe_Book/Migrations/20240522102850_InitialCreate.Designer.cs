@@ -12,7 +12,7 @@ using Recipe_Book.Data;
 namespace Recipe_Book.Migrations
 {
     [DbContext(typeof(DBConnect))]
-    [Migration("20240521103209_InitialCreate")]
+    [Migration("20240522102850_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -78,7 +78,7 @@ namespace Recipe_Book.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredients", b =>
+            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace Recipe_Book.Migrations
                     b.ToTable("RecipeIngredients");
                 });
 
-            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredients", b =>
+            modelBuilder.Entity("Recipe_Book.Models.RecipeIngredient", b =>
                 {
                     b.HasOne("Recipe_Book.Models.Ingredient", "Ingredient")
                         .WithMany("RecipeIngredients")
