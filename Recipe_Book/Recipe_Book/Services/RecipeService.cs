@@ -4,11 +4,11 @@ using Recipe_Book.Data;
 
 namespace Recipe_Book.Services
 {
-    public class RecipeServices
+    public class RecipeService
     {
         private readonly DBConnect _context;
 
-        public RecipeServices(DBConnect context)
+        public RecipeService(DBConnect context)
         {
             _context = context;
         }
@@ -32,8 +32,6 @@ namespace Recipe_Book.Services
             for (int i = 0; i < ingredientsIds.Count; i++)
             {
                 recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientsIds[i], Quantity = quantities[i], Unit = units[i] });
-
-
             }
 
             _context.Recipes.Add(recipe);
