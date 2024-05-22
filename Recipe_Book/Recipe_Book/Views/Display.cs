@@ -1,5 +1,6 @@
 ﻿using Recipe_Book.Services;
 using CustomPrint;
+using Recipe_Book.Models;
 
 namespace Recipe_Book.Views
 {
@@ -99,7 +100,13 @@ namespace Recipe_Book.Views
 
         private void ShowAllRecipes()
         {
+            var recipesTask = recipeService.GetAllRecipes();
+            List<Recipe> recipes = new List<Recipe>();
+           
+            foreach (var recipe in recipes)
+            {
 
+            }
         }
 
         

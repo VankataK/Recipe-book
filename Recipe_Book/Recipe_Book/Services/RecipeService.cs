@@ -13,38 +13,38 @@ namespace Recipe_Book.Services
             _context = context;
         }
 
-        public async Task<List<Recipe>> GetAllRecipes()
+        public List<Recipe> GetAllRecipes()
         {
-            return await _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).ToListAsync();
+            return _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).ToList();
         }
 
-        public async Task<Recipe> GetRecipeById(int id)
+        public Recipe GetRecipeById(int id)
         {
-            return await _context.Recipes
+            return _context.Recipes
                 .Include(r => r.RecipeIngredients)
                 .ThenInclude(ri => ri.Ingredient)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .FirstOrDefault(r => r.Id == id);
         }
 
-        public async Task<List<Recipe>> GetRecipeByCategory(string category)
+        public  List<Recipe> GetRecipeByCategory(string category)
         {
-            return await _context.Recipes
+            return _context.Recipes
                 .Include(r => r.RecipeIngredients)
                 .ThenInclude(ri => ri.Ingredient)
                 .Where(r => r.Category == category)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<List<Recipe>> GetRecipeByIngredient(string ingredient)
+        public List<Recipe> GetRecipeByIngredient(string ingredient)
         {
-            return await _context.Recipes
+            return _context.Recipes
                 .Include(r => r.RecipeIngredients)
                 .ThenInclude(ri => ri.Ingredient)
                 .Where(r => r.Ingredients.Contains(ingredient))
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task AddRecipe(Recipe recipe, List<int> ingredientsIds, List<int> quantities, List<string> units)
+        public void AddRecipe(Recipe recipe, List<int> ingredientsIds, List<int> quantities, List<string> units)
         {
             recipe.AddDate = DateTime.Now;
             for (int i = 0; i < ingredientsIds.Count; i++)
@@ -53,22 +53,22 @@ namespace Recipe_Book.Services
             }
 
             _context.Recipes.Add(recipe);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task UpdateRecipe(Recipe recipe)
+        public void UpdateRecipe(Recipe recipe)
         {
             _context.Entry(recipe).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteRecipe(int id)
+        public void DeleteRecipe(int id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = _context.Recipes.Find(id);
             if (recipe != null)
             {
                 _context.Recipes.Remove(recipe);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }
