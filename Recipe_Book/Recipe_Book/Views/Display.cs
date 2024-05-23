@@ -86,7 +86,21 @@ namespace Recipe_Book.Views
 
         private void AddNewRecipe()
         {
-            Recipe recipe = new Recipe("Burger", "Slagash pitkata i kufteto", "kufte, pitka, domat","Az","Osnovno");
+            string food, description, author, category;
+
+            Console.WriteLine("Име на рецептата: ");
+            food = Console.ReadLine();
+
+            Console.WriteLine("Начин на приготвяне: ");
+            description = Console.ReadLine();
+
+            Console.WriteLine("Автор: ");
+            author = Console.ReadLine();
+
+            Console.WriteLine("Категория: ");
+            category = Console.ReadLine();
+
+            Recipe recipe = new Recipe(food, description, "kufte, pitka, domat", author, category);
             recipeService.AddRecipe(recipe, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 100 }, new List<string> { "broika", "broika", "kilo" });
 
         }
