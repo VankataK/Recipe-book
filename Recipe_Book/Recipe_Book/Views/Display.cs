@@ -2,6 +2,7 @@
 using CustomPrint;
 using Recipe_Book.Models;
 using System.Threading.Channels;
+using System.Runtime.CompilerServices;
 
 namespace Recipe_Book.Views
 {
@@ -76,7 +77,9 @@ namespace Recipe_Book.Views
 
         private void DeleteRecipe()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Въведи id, което служи за изтриване на рецепта: ");
+            int id = int.Parse(Console.ReadLine());
+            recipeService.DeleteRecipe(id);
         }
 
         private void UpdateRecipe()
@@ -101,7 +104,7 @@ namespace Recipe_Book.Views
             category = Console.ReadLine();
 
             Recipe recipe = new Recipe(food, description, "kufte, pitka, domat", author, category);
-            recipeService.AddRecipe(recipe, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 100 }, new List<string> { "broika", "broika", "kilo" });
+            recipeService.AddRecipe(recipe, new List<int> { 1, 2 }, new List<int> { 1, 2}, new List<string> { "broika", "broika" });
 
         }
 
@@ -118,6 +121,7 @@ namespace Recipe_Book.Views
         public void ShowAllRecipes()
         {
             var list = recipeService.GetAllRecipes();
+
 
         }
 
