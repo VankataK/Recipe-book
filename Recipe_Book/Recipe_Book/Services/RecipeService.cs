@@ -71,5 +71,10 @@ namespace Recipe_Book.Services
                 _context.SaveChanges();
             }
         }
+
+        public Ingredient GetIngredientById(int id)
+        {
+            return _context.Ingredients.Find(id);
+        }
     }
 }

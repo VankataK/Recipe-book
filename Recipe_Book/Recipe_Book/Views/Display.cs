@@ -161,24 +161,68 @@ namespace Recipe_Book.Views
 
         private void AddNewRecipe()
         {
-            string food, description, author, category;
+            try
+            {
+                Console.WriteLine("Име на рецептата: ");
+                string food = Console.ReadLine();
 
-            Console.WriteLine("Име на рецептата: ");
-            food = Console.ReadLine();
+                Console.WriteLine("Начин на приготвяне: ");
+                string description = Console.ReadLine();
 
-            Console.WriteLine("Начин на приготвяне: ");
-            description = Console.ReadLine();
+                Console.WriteLine("Автор: ");
+                string author = Console.ReadLine();
 
-            Console.WriteLine("Автор: ");
-            author = Console.ReadLine();
+                Console.WriteLine("Категория: ");
+                string category = Console.ReadLine();
 
-            Console.WriteLine("Категория: ");
-            category = Console.ReadLine();
+                List<int> ingredientIds = new List<int>();
+                List<int> quantities = new List<int>();
+                List<string> units = new List<string>();
 
-            Recipe recipe = new Recipe(food, description, "kufte, pitka", author, category);
-            recipeService.AddRecipe(recipe, new List<int> { 1, 2 }, new List<int> { 1, 2}, new List<string> { "broika", "broika" });
+                while (true)
+                {
+                    Console.WriteLine("Въведете ID на съставката (или оставете празно за край): ");
+                    string ingredientInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(ingredientInput))
+                    {
+                        break;
+                    }
 
+                    if (int.TryParse(ingredientInput, out int ingredientId) && recipeService.GetIngredientById(ingredientId) != null)
+                    {
+                        ingredientIds.Add(ingredientId);
+
+                        Console.WriteLine("Количество: ");
+                        if (int.TryParse(Console.ReadLine(), out int quantity))
+                        {
+                            quantities.Add(quantity);
+                        }
+                        else
+                        {
+                            MCP.PrintNL("Невалидно количество!", "red");
+                            continue;
+                        }
+
+                        Console.WriteLine("Мярка (например: гр, мл, бр): ");
+                        string unit = Console.ReadLine();
+                        units.Add(unit);
+                    }
+                    else
+                    {
+                        MCP.PrintNL("Невалидно ID на съставка!", "red");
+                    }
+                }
+
+                Recipe recipe = new Recipe(food, description, string.Join(", ", ingredientIds), author, category);
+                recipeService.AddRecipe(recipe, ingredientIds, quantities, units);
+                MCP.PrintNL("Успешно добавена нова рецепта!", "green");
+            }
+            catch (Exception ex)
+            {
+                MCP.PrintNL($"Възникна грешка: {ex.Message}", "red");
+            }
         }
+
 
         private void SearchRecipeByProduct()
         {
