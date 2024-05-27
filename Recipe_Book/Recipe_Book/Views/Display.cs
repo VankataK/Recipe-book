@@ -142,7 +142,7 @@ namespace Recipe_Book.Views
                     recipe.Category = category;
                 }
 
-                // Assuming Ingredients are updated separately
+               
                 MCP.Print("Съставки (оставете празно за без промяна): ", "yellow");
                 string ingredients = Console.ReadLine();
                 if (!string.IsNullOrEmpty(ingredients))
