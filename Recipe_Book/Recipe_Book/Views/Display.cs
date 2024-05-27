@@ -77,14 +77,19 @@ namespace Recipe_Book.Views
 
         private void DeleteRecipe()
         {
+            Console.WriteLine("Списък с всички рецепти: ");
+            ShowAllRecipes();
+
             Console.WriteLine("Въведи id, което служи за изтриване на рецепта: ");
             int id = int.Parse(Console.ReadLine());
+
             recipeService.DeleteRecipe(id);
+            Console.WriteLine("Изтрита рецепта!");
         }
 
         private void UpdateRecipe()
         {
-            
+           
         }
 
         private void AddNewRecipe()
@@ -120,12 +125,16 @@ namespace Recipe_Book.Views
 
         public void ShowAllRecipes()
         {
+            Console.WriteLine("Показване на списъка с всички рецепти: ");
             var recipes = recipeService.GetAllRecipes();
 
+            
             foreach (var recipe in recipes)
             {
-                Console.WriteLine($"ID: {recipe.Id}, Name: {recipe.Name}, Description: {recipe.Description}, Ingredients: {recipe.Ingredients}, Author: {recipe.Author}, Data: {recipe.AddDate}");
+                Console.WriteLine("|"  + new string('-', 150) + "|");
+                Console.WriteLine($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Ingredients: {recipe.Ingredients} | Author: {recipe.Author} | Data: {recipe.AddDate} |");
             }
+            Console.WriteLine("|" + new string('-', 150) + "|");
 
         }
 
