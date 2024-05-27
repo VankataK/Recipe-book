@@ -81,7 +81,7 @@ namespace Recipe_Book.Views
 
         private void DeleteRecipe()
         {
-            Console.OutputEncoding = Encoding.UTF8;
+
             try
             {
                 MCP.PrintNL("Списък с всички рецепти: ", "red");
@@ -102,7 +102,6 @@ namespace Recipe_Book.Views
 
         private void UpdateRecipe()
         {
-            Console.OutputEncoding = Encoding.UTF8;
             try
             {
                 MCP.PrintNL("Списък с всички рецепти: ", "red");
@@ -167,7 +166,6 @@ namespace Recipe_Book.Views
 
         private void AddNewRecipe()
         {
-            Console.OutputEncoding = Encoding.UTF8;
             try
             {
                 Console.WriteLine("Име на рецептата: ");
@@ -243,7 +241,6 @@ namespace Recipe_Book.Views
 
         public void ShowAllRecipes()
         {
-            Console.OutputEncoding = Encoding.UTF8;
             MCP.PrintNL("Показване на списъка с всички рецепти: ", "red");
             var recipes = recipeService.GetAllRecipes();
 

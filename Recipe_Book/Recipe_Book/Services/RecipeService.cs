@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipe_Book.Models;
 using Recipe_Book.Data;
-using System.Text;
 
 namespace Recipe_Book.Services
 {
@@ -17,7 +16,7 @@ namespace Recipe_Book.Services
 
         public List<Recipe> GetAllRecipes()
         {
-            Console.OutputEncoding = Encoding.UTF8;
+
             return _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).ToList();
         }
 
