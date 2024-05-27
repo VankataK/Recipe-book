@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipe_Book.Models;
 using Recipe_Book.Data;
+using System.Text;
 
 namespace Recipe_Book.Services
 {
     public class RecipeService
     {
+
         private readonly DBConnect _context;
 
         public RecipeService(DBConnect context)
@@ -15,6 +17,7 @@ namespace Recipe_Book.Services
 
         public List<Recipe> GetAllRecipes()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             return _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).ToList();
         }
 
