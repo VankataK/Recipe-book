@@ -84,7 +84,7 @@ namespace Recipe_Book.Views
 
         private void UpdateRecipe()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void AddNewRecipe()
@@ -120,8 +120,12 @@ namespace Recipe_Book.Views
 
         public void ShowAllRecipes()
         {
-            var list = recipeService.GetAllRecipes();
+            var recipes = recipeService.GetAllRecipes();
 
+            foreach (var recipe in recipes)
+            {
+                Console.WriteLine($"ID: {recipe.Id}, Name: {recipe.Name}, Description: {recipe.Description}, Ingredients: {recipe.Ingredients}, Author: {recipe.Author}, Data: {recipe.AddDate}");
+            }
 
         }
 
