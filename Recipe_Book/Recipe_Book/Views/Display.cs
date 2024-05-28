@@ -3,11 +3,14 @@ using CustomPrint;
 using Recipe_Book.Models;
 using System.Threading.Channels;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Recipe_Book.Views
 {
+
     public class Display
     {
+
         private readonly RecipeService recipeService;
 
         public Display(RecipeService recipeService)
@@ -17,6 +20,7 @@ namespace Recipe_Book.Views
 
         public void ShowMenu()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             bool exit = false;
             int choice;
             while (!exit)
@@ -77,6 +81,7 @@ namespace Recipe_Book.Views
 
         private void DeleteRecipe()
         {
+
             try
             {
                 MCP.PrintNL("Списък с всички рецепти: ", "red");
