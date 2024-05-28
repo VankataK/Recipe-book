@@ -16,6 +16,21 @@ namespace Recipe_Book.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Ingredients",
                 columns: table => new
                 {
@@ -31,6 +46,21 @@ namespace Recipe_Book.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Units",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Units", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Recipes",
                 columns: table => new
                 {
@@ -40,17 +70,20 @@ namespace Recipe_Book.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Ingredients = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Author = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AddDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Category = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Recipes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -62,9 +95,8 @@ namespace Recipe_Book.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RecipeId = table.Column<int>(type: "int", nullable: false),
                     IngredientId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Unit = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Quantity = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    UnitId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,6 +113,12 @@ namespace Recipe_Book.Migrations
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredients_Units_UnitId",
+                        column: x => x.UnitId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -93,6 +131,16 @@ namespace Recipe_Book.Migrations
                 name: "IX_RecipeIngredients_RecipeId",
                 table: "RecipeIngredients",
                 column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeIngredients_UnitId",
+                table: "RecipeIngredients",
+                column: "UnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_CategoryId",
+                table: "Recipes",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -106,6 +154,12 @@ namespace Recipe_Book.Migrations
 
             migrationBuilder.DropTable(
                 name: "Recipes");
+
+            migrationBuilder.DropTable(
+                name: "Units");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

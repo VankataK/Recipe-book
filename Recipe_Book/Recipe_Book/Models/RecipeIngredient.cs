@@ -15,8 +15,10 @@ namespace Recipe_Book.Models
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
-        public string Unit {  get; set; }
+        [ForeignKey("Unit")]
+        public int UnitId { get; set; }
+        public Unit Unit {  get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Recipe_Book.Data;
 namespace Recipe_Book.Migrations
 {
     [DbContext(typeof(DBConnect))]
-    [Migration("20240522102850_InitialCreate")]
+    [Migration("20240528212850_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,23 @@ namespace Recipe_Book.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Recipe_Book.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("Recipe_Book.Models.Ingredient", b =>
                 {
@@ -57,15 +74,10 @@ namespace Recipe_Book.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Ingredients")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -74,6 +86,8 @@ namespace Recipe_Book.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Recipes");
                 });
@@ -89,15 +103,14 @@ namespace Recipe_Book.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("UnitId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -105,13 +118,43 @@ namespace Recipe_Book.Migrations
 
                     b.HasIndex("RecipeId");
 
+                    b.HasIndex("UnitId");
+
                     b.ToTable("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("Recipe_Book.Models.Unit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Units");
+                });
+
+            modelBuilder.Entity("Recipe_Book.Models.Recipe", b =>
+                {
+                    b.HasOne("Recipe_Book.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Recipe_Book.Models.RecipeIngredient", b =>
                 {
                     b.HasOne("Recipe_Book.Models.Ingredient", "Ingredient")
-                        .WithMany("RecipeIngredients")
+                        .WithMany()
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -122,14 +165,17 @@ namespace Recipe_Book.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Recipe_Book.Models.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Ingredient");
 
                     b.Navigation("Recipe");
-                });
 
-            modelBuilder.Entity("Recipe_Book.Models.Ingredient", b =>
-                {
-                    b.Navigation("RecipeIngredients");
+                    b.Navigation("Unit");
                 });
 
             modelBuilder.Entity("Recipe_Book.Models.Recipe", b =>
