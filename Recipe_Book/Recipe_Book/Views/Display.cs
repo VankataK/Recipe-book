@@ -241,12 +241,29 @@ namespace Recipe_Book.Views
 
         private void SearchRecipeByProduct()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void SearchRecipeByCategory()
         {
-            throw new NotImplementedException();
+            MCP.PrintNL("Избери една от следните категории: ", "cyan");
+            MCP.PrintNL("1. основни ястия", "green");
+            MCP.PrintNL("2. салати", "green");
+            MCP.PrintNL("3. супи", "green");
+            MCP.PrintNL("4. десерти", "green");
+            MCP.PrintNL("5. предястия", "green");
+            MCP.PrintNL("6. рибни ястия", "green");
+            MCP.PrintNL("7. апетайзер", "green");
+
+            string choice = Console.ReadLine();
+
+            var recipesByCategory = recipeService.GetRecipeByCategory(choice);
+            foreach (var recipe in recipesByCategory)
+            {
+                MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+                MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Ingredients: {recipe.Ingredients} | Author: {recipe.Author} | Data: {recipe.AddDate} |", "yellow");
+            }
+            MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
         }
 
         public void ShowAllRecipes()
