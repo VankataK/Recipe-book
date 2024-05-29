@@ -54,7 +54,7 @@ namespace Recipe_Book.Views
                         break;
 
                     case 3:
-                        SearchRecipeByProduct();
+                        SearchRecipeByIngredient();
                         break;
 
                     case 4:
@@ -239,9 +239,25 @@ namespace Recipe_Book.Views
         }
 
 
-        private void SearchRecipeByProduct()
+        private void SearchRecipeByIngredient()
         {
-            
+            MCP.Print("Въведи съставка: ", "cyan");
+            var ingredient = Console.ReadLine();
+
+            try
+            {
+                var search = recipeService.GetRecipeByIngredient(ingredient);
+                foreach (var recipe in search)
+                {
+                    MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+                    MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
+                }
+                MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+            }
+            catch (Exception)
+            {
+                MCP.PrintNL("Невалидна съставка!", "red");
+            }
         }
 
         private void SearchRecipeByCategory()
@@ -261,7 +277,7 @@ namespace Recipe_Book.Views
             foreach (var recipe in recipesByCategory)
             {
                 MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
-                MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Ingredients: {recipe.Ingredients} | Author: {recipe.Author} | Data: {recipe.AddDate} |", "yellow");
+                MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
             }
             MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
         }
@@ -275,7 +291,7 @@ namespace Recipe_Book.Views
             foreach (var recipe in recipes)
             {
                 MCP.PrintNL("|"  + new string('-', 150) + "|", "yellow");
-                MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Ingredients: {recipe.Ingredients} | Author: {recipe.Author} | Data: {recipe.AddDate} |", "yellow");
+                MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
             }
             MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
 
