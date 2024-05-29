@@ -247,12 +247,22 @@ namespace Recipe_Book.Views
             try
             {
                 var search = recipeService.GetRecipeByIngredient(ingredient);
-                foreach (var recipe in search)
+
+                if (search.Count == 0)
                 {
-                    MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
-                    MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
+                    MCP.PrintNL("Няма рецепта с този продукт! Може да добавите. :))))", "red");
+                    return;
                 }
-                MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+                else
+                {
+                    foreach (var recipe in search)
+                    {
+                        MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
+                        MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
+                    }
+                    MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
+                }
+              
             }
             catch (Exception)
             {
@@ -276,10 +286,10 @@ namespace Recipe_Book.Views
             var recipesByCategory = recipeService.GetRecipeByCategory(choice);
             foreach (var recipe in recipesByCategory)
             {
-                MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+                MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
                 MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
             }
-            MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+            MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
         }
 
         public void ShowAllRecipes()
@@ -290,10 +300,10 @@ namespace Recipe_Book.Views
             
             foreach (var recipe in recipes)
             {
-                MCP.PrintNL("|"  + new string('-', 150) + "|", "yellow");
+                MCP.PrintNL("|"  + new string('-', 220) + "|", "yellow");
                 MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
             }
-            MCP.PrintNL("|" + new string('-', 150) + "|", "yellow");
+            MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
 
         }
 
