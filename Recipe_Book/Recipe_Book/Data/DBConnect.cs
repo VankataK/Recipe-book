@@ -5,6 +5,7 @@ namespace Recipe_Book.Data
 {
     public class DBConnect : DbContext
     {
+        
         public DbSet<Recipe> Recipes { get; set; }
 
         public DbSet<Ingredient> Ingredients { get; set;}
