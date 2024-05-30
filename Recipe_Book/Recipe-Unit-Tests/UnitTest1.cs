@@ -1,16 +1,11 @@
-namespace Recipe_Unit_Tests
-{
-    public class Tests
-    {
-        [SetUp]
-        public void Setup()
-        {
-        }
+using NUnit.Framework;
+using Recipe_Book.Services;
+using Recipe_Book.Views;
+using Recipe_Book.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
+using Recipe_Book.Data;
 
-        [Test]
-        public void Test1()
-        {
-            Assert.Pass();
-        }
-    }
-}
+
