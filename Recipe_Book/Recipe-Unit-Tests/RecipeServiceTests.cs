@@ -7,12 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 
-namespace Recipe_Book.Tests.Services
-{
-    [TestFixture]
-    public class RecipeServiceTests
-    {
-        
-    }
-}
+
+
 
