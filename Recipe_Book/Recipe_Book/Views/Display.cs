@@ -253,7 +253,7 @@ namespace Recipe_Book.Views
                     MCP.PrintNL("Няма рецепта с този продукт! Може да добавите. :))))", "red");
                     return;
                 }
-                else
+                else   
                 {
                     foreach (var recipe in search)
                     {
@@ -273,12 +273,12 @@ namespace Recipe_Book.Views
         private void SearchRecipeByCategory()
         {
             MCP.PrintNL("Избери една от следните категории: ", "cyan");
-            MCP.PrintNL("1. основни ястия", "green");
-            MCP.PrintNL("2. салати", "green");
-            MCP.PrintNL("3. супи", "green");
-            MCP.PrintNL("4. десерти", "green");
-            MCP.PrintNL("5. предястия", "green");
-            MCP.PrintNL("6. рибни ястия", "green");
+            MCP.PrintNL("1. основно ястие", "green");
+            MCP.PrintNL("2. салата", "green");
+            MCP.PrintNL("3. супа", "green");
+            MCP.PrintNL("4. десерт", "green");
+            MCP.PrintNL("5. предястие", "green");
+            MCP.PrintNL("6. рибно ястие", "green");
             MCP.PrintNL("7. апетайзер", "green");
 
             string choice = Console.ReadLine();
