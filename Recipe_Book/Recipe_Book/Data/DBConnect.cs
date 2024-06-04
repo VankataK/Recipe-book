@@ -5,6 +5,7 @@ namespace Recipe_Book.Data
 {
     public class DBConnect : DbContext
     {
+        
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set;}
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
@@ -33,11 +34,5 @@ namespace Recipe_Book.Data
                 .HasOne(ri => ri.Ingredient)
                 .WithMany()
                 .HasForeignKey(ri => ri.IngredientId);
-
-            modelBuilder.Entity<RecipeIngredient>()
-                .HasOne(ri => ri.Unit)
-                .WithMany()
-                .HasForeignKey(ri => ri.UnitId);
-        }
     }
 }

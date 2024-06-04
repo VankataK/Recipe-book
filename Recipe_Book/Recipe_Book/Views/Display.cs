@@ -54,7 +54,7 @@ namespace Recipe_Book.Views
                         break;
 
                     case 3:
-                        SearchRecipeByProduct();
+                        SearchRecipeByIngredient();
                         break;
 
                     case 4:
@@ -380,10 +380,8 @@ namespace Recipe_Book.Views
 
         private void ShowRecipesInColor(List<Recipe> recipes, string color)
         {
-<<<<<<< Updated upstream
-=======
-            
-            
+            {
+                string category = "";
                 MCP.PrintNL("Списък с всички рецепти: ", "red");
                 ShowAllRecipes();
 
@@ -420,12 +418,46 @@ namespace Recipe_Book.Views
                     recipe.Author = author;
                 }
 
-                MCP.Print("Категория: (оставете празно за без промяна) ", "yellow");
-                string category = Console.ReadLine();
-                if (!string.IsNullOrEmpty(category))
+                MCP.PrintNL("Избери една от следните категории: ", "cyan");
+                MCP.PrintNL("1. основно ястие", "green");
+                MCP.PrintNL("2. салата", "green");
+                MCP.PrintNL("3. супа", "green");
+                MCP.PrintNL("4. десерт", "green");
+                MCP.PrintNL("5. предястие", "green");
+                MCP.PrintNL("6. рибно ястие", "green");
+                MCP.PrintNL("7. апетайзер", "green");
+
+                int choiceCategory = int.Parse(Console.ReadLine());
+                switch (choiceCategory)
                 {
-                    recipe.Category = category;
+                    case 1:
+                        category = "основно ястие";
+                        break;
+                    case 2:
+                        category = "салата";
+                        break;
+                    case 3:
+                        category = "супа";
+                        break;
+                    case 4:
+                        category = "десерт";
+                        break;
+                    case 5:
+                        category = "предясте";
+                        break;
+                    case 6:
+                        category = "рибно ястие";
+                        break;
+                    case 7:
+                        category = "апетайзер";
+                        break;
+                    default:
+                        break;
                 }
+                        if (!string.IsNullOrEmpty(category))
+                        {
+                            recipe.Category = category;
+                        }
 
                
                 MCP.Print("Съставки (оставете празно за без промяна): ", "yellow");
@@ -441,6 +473,20 @@ namespace Recipe_Book.Views
             
             
             
+
+                        MCP.Print("Съставки (оставете празно за без промяна): ", "yellow");
+                        string ingredients = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(ingredients))
+                        {
+                            recipe.Ingredients = ingredients;
+                        }
+
+                        recipeService.UpdateRecipe(recipe);
+                        MCP.PrintNL("Рецептата е успешно редактирана!", "green");
+                
+            }
+            catch (Exception)
+            {
                 MCP.PrintNL("Невалидни данни! Въведете цяло число за ID!", "red");
                 
             
@@ -475,6 +521,12 @@ namespace Recipe_Book.Views
         {
             try
             {
+                string food, description, author, category;
+                category = "";
+                List<int> ingredientIds = new List<int>();
+                List<int> quantities = new List<int>();
+                List<string> units = new List<string>();
+
                 Console.WriteLine("Име на рецептата: ");
                 string food = Console.ReadLine();
 
@@ -492,6 +544,41 @@ namespace Recipe_Book.Views
                 List<string> units = new List<string>();
 
                 while (true)
+
+                MCP.PrintNL("Избери една от следните категории: ", "cyan");
+                MCP.PrintNL("1. основно ястие", "green");
+                MCP.PrintNL("2. салата", "green");
+                MCP.PrintNL("3. супа", "green");
+                MCP.PrintNL("4. десерт", "green");
+                MCP.PrintNL("5. предястие", "green");
+                MCP.PrintNL("6. рибно ястие", "green");
+                MCP.PrintNL("7. апетайзер", "green");
+
+                int choiceCategory = int.Parse(Console.ReadLine());
+                switch (choiceCategory)
+                {
+                    case 1:
+                        category = "основно ястие";
+                        break;
+                    case 2: category = "салата";
+                        break;
+                    case 3: category = "супа";
+                        break;
+                    case 4: category = "десерт";
+                        break;
+                    case 5:
+                        category = "предясте";
+                        break;
+                    case 6:
+                        category = "рибно ястие";
+                        break;
+                    case 7: category = "апетайзер";
+                        break;
+                    default:
+                        break;
+                }
+                bool addingIngredients = true;
+                while (addingIngredients)
                 {
                     Console.WriteLine("Въведете ID на съставката (или оставете празно за край): ");
                     string ingredientInput = Console.ReadLine();
@@ -536,14 +623,84 @@ namespace Recipe_Book.Views
         }
 
 
-        private void SearchRecipeByProduct()
+        private void SearchRecipeByIngredient()
         {
-            throw new NotImplementedException();
+            MCP.Print("Въведи съставка: ", "cyan");
+            var ingredient = Console.ReadLine();
+
+            try
+            {
+                var search = recipeService.GetRecipeByIngredient(ingredient);
+
+                if (search.Count == 0)
+                {
+                    MCP.PrintNL("Няма рецепта с този продукт! Може да добавите. :))))", "red");
+                    return;
+                }
+                else   
+                {
+                    foreach (var recipe in search)
+                    {
+                        MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
+                        MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
+                    }
+                    MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
+                }
+              
+            }
+            catch (Exception)
+            {
+                MCP.PrintNL("Невалидна съставка!", "red");
+            }
         }
 
         private void SearchRecipeByCategory()
         {
+            MCP.PrintNL("Избери една от следните категории: ", "cyan");
+            MCP.PrintNL("1. основно ястие", "green");
+            MCP.PrintNL("2. салата", "green");
+            MCP.PrintNL("3. супа", "green");
+            MCP.PrintNL("4. десерт", "green");
+            MCP.PrintNL("5. предястие", "green");
+            MCP.PrintNL("6. рибно ястие", "green");
+            MCP.PrintNL("7. апетайзер", "green");
+            string choice = "";
+            int choiceCategory = int.Parse(Console.ReadLine());
+            switch (choiceCategory)
+            {
+                case 1:
+                    choice = "основно ястие";
+                    break;
+                case 2:
+                    choice = "салата";
+                    break;
+                case 3:
+                    choice = "супа";
+                    break;
+                case 4:
+                    choice = "десерт";
+                    break;
+                case 5:
+                    choice = "предясте";
+                    break;
+                case 6:
+                    choice = "рибно ястие";
+                    break;
+                case 7:
+                    choice = "апетайзер";
+                    break;
+                default:
+                    break;
+            }
+            
 
+            var recipesByCategory = recipeService.GetRecipeByCategory(choice);
+            foreach (var recipe in recipesByCategory)
+            {
+                MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
+                MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
+            }
+            MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
         }
 
         public void ShowAllRecipes()
@@ -552,13 +709,17 @@ namespace Recipe_Book.Views
             var recipes = recipeService.GetAllRecipes();
 
             
->>>>>>> Stashed changes
             foreach (var recipe in recipes)
             {
                 MCP.PrintNL("|" + new string('-', 150) + "|", color);
                 MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Author: {recipe.Author} | Date: {recipe.AddDate} | Category: {recipe.Category.Name} | Ingredients: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity} {ri.Unit.Name}"))} |", color);
             }
             MCP.PrintNL("|" + new string('-', 150) + "|", color);
+                MCP.PrintNL("|"  + new string('-', 220) + "|", "yellow");
+                MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Описание: {recipe.Description} | Съставки: {recipe.Ingredients} | Категория: {recipe.Category} | Автор: {recipe.Author} | Дата на създаване: {recipe.AddDate} |", "yellow");
+            }
+            MCP.PrintNL("|" + new string('-', 220) + "|", "yellow");
+
         }
 
         private int AddUnit()
