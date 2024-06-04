@@ -88,6 +88,7 @@ namespace Recipe_Book.Services
         {
             return _context.Ingredients.Find(id);
         }
+<<<<<<< Updated upstream
         public List<Ingredient> GetAllIngredients()
         {
             return _context.Ingredients.ToList();
@@ -116,5 +117,25 @@ namespace Recipe_Book.Services
         {
             return _context.Units.ToList();
         }
+=======
+
+        public Ingredient GetIngredientByName(string name)
+        {
+            return _context.Ingredients.FirstOrDefault(i => i.Name == name);
+        }
+
+        public void AddIngredient(Recipe recipe, Ingredient ingredient, int quantity, string unit)
+        {
+            _context.Ingredients.Add(ingredient);
+            recipe.RecipeIngredients.Add(new RecipeIngredient { RecipeId = recipe.Id, IngredientId = ingredient.Id, Quantity = quantity, Unit = unit });
+            _context.SaveChanges();
+        }
+
+        public void UpdateRecipeIngredientQuantity(Recipe recipe, Ingredient ingredient, int newQuantity)
+        {
+            _context.RecipeIngredients.FirstOrDefault(ri => ri.RecipeId == recipe.Id && ri.IngredientId == ingredient.Id).Quantity = newQuantity;
+            _context.SaveChanges();
+        }
+>>>>>>> Stashed changes
     }
 }

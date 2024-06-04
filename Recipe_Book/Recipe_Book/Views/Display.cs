@@ -380,6 +380,179 @@ namespace Recipe_Book.Views
 
         private void ShowRecipesInColor(List<Recipe> recipes, string color)
         {
+<<<<<<< Updated upstream
+=======
+            
+            
+                MCP.PrintNL("Списък с всички рецепти: ", "red");
+                ShowAllRecipes();
+
+                MCP.Print("Въведи id на рецептата, което служи за редакция: ", "red");
+                int id = int.Parse(Console.ReadLine());
+
+                Recipe recipe = recipeService.GetRecipeById(id);
+                if (recipe == null)
+                {
+                    MCP.PrintNL("Рецептата с това ID не е намерена!", "red");
+                    return;
+                }
+
+                MCP.PrintNL($"Редактиране на рецепта: {recipe.Name}", "yellow");
+
+                MCP.Print("Име на рецептата: (оставете празно за без промяна) ", "yellow");
+                string food = Console.ReadLine();
+                if (!string.IsNullOrEmpty(food))
+                {
+                    recipe.Name = food;
+                }
+
+                MCP.Print("Начин на приготвяне: (оставете празно за без промяна) ", "yellow");
+                string description = Console.ReadLine();
+                if (!string.IsNullOrEmpty(description))
+                {
+                    recipe.Description = description;
+                }
+
+                MCP.Print("Автор: (оставете празно за без промяна) ", "yellow");
+                string author = Console.ReadLine();
+                if (!string.IsNullOrEmpty(author))
+                {
+                    recipe.Author = author;
+                }
+
+                MCP.Print("Категория: (оставете празно за без промяна) ", "yellow");
+                string category = Console.ReadLine();
+                if (!string.IsNullOrEmpty(category))
+                {
+                    recipe.Category = category;
+                }
+
+               
+                MCP.Print("Съставки (оставете празно за без промяна): ", "yellow");
+                string ingredients = Console.ReadLine();
+                if (!string.IsNullOrEmpty(ingredients))
+                {
+                    recipe.Ingredients = ingredients;
+                    UpdateIngredients(recipe, ingredients);
+                }
+
+                recipeService.UpdateRecipe(recipe);
+                MCP.PrintNL("Рецептата е успешно редактирана!", "green");
+            
+            
+            
+                MCP.PrintNL("Невалидни данни! Въведете цяло число за ID!", "red");
+                
+            
+        }
+
+        private void UpdateIngredients(Recipe recipe,string ingredients)
+        {
+            foreach (var ingredientName in ingredients.Split(", ", StringSplitOptions.RemoveEmptyEntries))
+            {
+                Ingredient ingredient = recipeService.GetIngredientByName(ingredientName);
+                if (ingredient != null)
+                {
+                    MCP.Print($"{ingredient.Name} Грамаж(оставете празно за без промяна): ", "yellow");
+                    if (int.TryParse(Console.ReadLine(), out int quantity)) 
+                    {
+                        recipeService.UpdateRecipeIngredientQuantity(recipe, ingredient, quantity);
+                    }
+                }
+                else
+                {
+                    MCP.Print($"{ingredient} Грамаж: ", "yellow");
+                    int quantity = int.Parse(Console.ReadLine());
+                    MCP.Print($"{ingredient} Мярка (например: гр, мл, бр): ", "yellow");
+                    string unit = Console.ReadLine();
+                    ingredient = new Ingredient { Name = ingredientName };
+                    recipeService.AddIngredient(recipe, ingredient, quantity, unit);
+                }
+            }
+        }
+
+        private void AddNewRecipe()
+        {
+            try
+            {
+                Console.WriteLine("Име на рецептата: ");
+                string food = Console.ReadLine();
+
+                Console.WriteLine("Начин на приготвяне: ");
+                string description = Console.ReadLine();
+
+                Console.WriteLine("Автор: ");
+                string author = Console.ReadLine();
+
+                Console.WriteLine("Категория: ");
+                string category = Console.ReadLine();
+
+                List<int> ingredientIds = new List<int>();
+                List<int> quantities = new List<int>();
+                List<string> units = new List<string>();
+
+                while (true)
+                {
+                    Console.WriteLine("Въведете ID на съставката (или оставете празно за край): ");
+                    string ingredientInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(ingredientInput))
+                    {
+                        break;
+                    }
+
+                    if (int.TryParse(ingredientInput, out int ingredientId) && recipeService.GetIngredientById(ingredientId) != null)
+                    {
+                        ingredientIds.Add(ingredientId);
+
+                        Console.WriteLine("Количество: ");
+                        if (int.TryParse(Console.ReadLine(), out int quantity))
+                        {
+                            quantities.Add(quantity);
+                        }
+                        else
+                        {
+                            MCP.PrintNL("Невалидно количество!", "red");
+                            continue;
+                        }
+
+                        Console.WriteLine("Мярка (например: гр, мл, бр): ");
+                        string unit = Console.ReadLine();
+                        units.Add(unit);
+                    }
+                    else
+                    {
+                        MCP.PrintNL("Невалидно ID на съставка!", "red");
+                    }
+                }
+
+                Recipe recipe = new Recipe(food, description, string.Join(", ", ingredientIds.Select(i => recipeService.GetIngredientById(i).Name)), author, category);
+                recipeService.AddRecipe(recipe, ingredientIds, quantities, units);
+                MCP.PrintNL("Успешно добавена нова рецепта!", "green");
+            }
+            catch (Exception ex)
+            {
+                MCP.PrintNL($"Възникна грешка: {ex.Message}", "red");
+            }
+        }
+
+
+        private void SearchRecipeByProduct()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SearchRecipeByCategory()
+        {
+
+        }
+
+        public void ShowAllRecipes()
+        {
+            MCP.PrintNL("Показване на списъка с всички рецепти: ", "red");
+            var recipes = recipeService.GetAllRecipes();
+
+            
+>>>>>>> Stashed changes
             foreach (var recipe in recipes)
             {
                 MCP.PrintNL("|" + new string('-', 150) + "|", color);
