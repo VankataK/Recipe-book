@@ -5,17 +5,17 @@ namespace Recipe_Book.Data
 {
     public class DBConnect : DbContext
     {
-        
+
         public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set;}
+        public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("server=localhost;database=recipebook;user=root;password=;Convert Zero Datetime=True", 
-                new MySqlServerVersion(new Version(10,4,27)));
+            optionsBuilder.UseMySql("server=localhost;database=recipebook;user=root;password=;Convert Zero Datetime=True",
+                new MySqlServerVersion(new Version(10, 4, 27)));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,5 +34,6 @@ namespace Recipe_Book.Data
                 .HasOne(ri => ri.Ingredient)
                 .WithMany()
                 .HasForeignKey(ri => ri.IngredientId);
+        }
     }
 }

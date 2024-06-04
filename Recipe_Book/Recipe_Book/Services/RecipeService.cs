@@ -16,10 +16,8 @@ namespace Recipe_Book.Services
 
         public List<Recipe> GetAllRecipes()
         {
-
             return _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(r => r.Category).ToList();
         }
-
         public void AddRecipe(Recipe recipe, List<int> ingredientsIds, List<decimal> quantities, List<int> unitsIds)
         {
             recipe.AddDate = DateTime.Now;
@@ -31,13 +29,10 @@ namespace Recipe_Book.Services
             _context.Recipes.Add(recipe);
             _context.SaveChanges();
         }
-
         public void UpdateRecipe()
         {
-            //Finish this
-                _context.SaveChanges();
+           _context.SaveChanges();
         }
-
         public void DeleteRecipe(int id)
         {
             var recipe = _context.Recipes.Find(id);
@@ -47,7 +42,6 @@ namespace Recipe_Book.Services
                 _context.SaveChanges();
             }
         }
-
         public Recipe GetRecipeById(int id)
         {
             return _context.Recipes
@@ -55,14 +49,12 @@ namespace Recipe_Book.Services
                 .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefault(r => r.Id == id);
         }
-
         public List<Recipe> GetRecipesByCategory(int categoryId)
         {
             return _context.Recipes
                 .Where(r => r.CategoryId == categoryId)
                 .ToList();
         }
-
         public List<Recipe> GetRecipesByIngredient(int ingredientId)
         {
             return _context.RecipeIngredients
@@ -71,7 +63,6 @@ namespace Recipe_Book.Services
              .Distinct()
              .ToList();
         }
-
         public List<Recipe> GetRecipesByMultipleIngredients(List<int> ingredientIds)
         {
             return _context.Recipes
@@ -88,7 +79,6 @@ namespace Recipe_Book.Services
         {
             return _context.Ingredients.Find(id);
         }
-<<<<<<< Updated upstream
         public List<Ingredient> GetAllIngredients()
         {
             return _context.Ingredients.ToList();
@@ -103,39 +93,14 @@ namespace Recipe_Book.Services
         {
             return _context.Categories.ToList();
         }
-        public Category GetCategoryByName(string categoryName)
+        public Category GetCategoryById(int categoryId)
         {
-            return _context.Categories.FirstOrDefault(c => c.Name == categoryName);
+            return _context.Categories.FirstOrDefault(c => c.Id == categoryId);
         }
-
-        public void AddUnit(Unit units)
-        {
-            _context.Units.Add(units);
-            _context.SaveChanges();
-        }
+        
         public List<Unit> GetAllUnits()
         {
             return _context.Units.ToList();
         }
-=======
-
-        public Ingredient GetIngredientByName(string name)
-        {
-            return _context.Ingredients.FirstOrDefault(i => i.Name == name);
-        }
-
-        public void AddIngredient(Recipe recipe, Ingredient ingredient, int quantity, string unit)
-        {
-            _context.Ingredients.Add(ingredient);
-            recipe.RecipeIngredients.Add(new RecipeIngredient { RecipeId = recipe.Id, IngredientId = ingredient.Id, Quantity = quantity, Unit = unit });
-            _context.SaveChanges();
-        }
-
-        public void UpdateRecipeIngredientQuantity(Recipe recipe, Ingredient ingredient, int newQuantity)
-        {
-            _context.RecipeIngredients.FirstOrDefault(ri => ri.RecipeId == recipe.Id && ri.IngredientId == ingredient.Id).Quantity = newQuantity;
-            _context.SaveChanges();
-        }
->>>>>>> Stashed changes
     }
 }
