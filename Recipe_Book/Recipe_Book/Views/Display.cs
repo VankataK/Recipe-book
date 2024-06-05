@@ -158,7 +158,7 @@ namespace Recipe_Book.Views
             }
         }
 
-        private void SearchRecipesByMultipleIngredients()
+        public void SearchRecipesByMultipleIngredients()
         {
             try
             {
@@ -307,7 +307,7 @@ namespace Recipe_Book.Views
             }
         } 
 
-        private void UpdateRecipe()
+        public void UpdateRecipe()
         {
             try
             {
@@ -424,7 +424,7 @@ namespace Recipe_Book.Views
             }
         }
 
-        private void DeleteRecipe()
+        public void DeleteRecipe()
         {
 
             try
@@ -445,7 +445,7 @@ namespace Recipe_Book.Views
             
         }
 
-        private void ShowRecipesInColor(List<Recipe> recipes, string color)
+        public void ShowRecipesInColor(List<Recipe> recipes, string color)
         {
             foreach (var recipe in recipes)
             {
@@ -455,7 +455,7 @@ namespace Recipe_Book.Views
             MCP.PrintNL("|" + new string('-', 150) + "|", color);
         }
 
-        private int AddUnit()
+        public int ChooseUnit()
         {
             int unitId;
 
