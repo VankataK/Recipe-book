@@ -9,7 +9,11 @@ namespace Recipe_Book.Views
 
     public class Display
     {
+
         private readonly RecipeService recipeService;
+        private readonly IngredientService ingredientService;
+        private readonly CategoryService categoryService;
+        private readonly UnitService unitService;
 
         public Display()
         {
@@ -18,7 +22,6 @@ namespace Recipe_Book.Views
             this.categoryService = new CategoryService();
             this.unitService = new UnitService();
         }
-
 
         public void ShowMenu()
         {
@@ -99,7 +102,7 @@ namespace Recipe_Book.Views
             try
             {
                 MCP.PrintNL("-----Категории-----", "yellow");
-                var categories = recipeService.GetAllCategories();
+                var categories = categoryService.GetAllCategories();
                 foreach (var category in categories)
                 {
                     MCP.PrintNL($"{category.Id}. {category.Name}", "yellow");
@@ -129,7 +132,7 @@ namespace Recipe_Book.Views
             try
             {
                 MCP.PrintNL("-----Съставки-----", "yellow");
-                var ingredients = recipeService.GetAllIngredients();
+                var ingredients = ingredientService.GetAllIngredients();
                 foreach (var ingredient in ingredients)
                 {
                     MCP.PrintNL($"{ingredient.Id}. {ingredient.Name}", "yellow");
@@ -160,7 +163,7 @@ namespace Recipe_Book.Views
             try
             {
                 MCP.PrintNL("-----Съставки-----", "yellow");
-                var ingredients = recipeService.GetAllIngredients();
+                var ingredients = ingredientService.GetAllIngredients();
                 foreach (var ingredient in ingredients)
                 {
                     MCP.PrintNL($"{ingredient.Id}. {ingredient.Name}", "yellow");
@@ -216,7 +219,7 @@ namespace Recipe_Book.Views
                 while (true)
                 {
                     MCP.PrintNL("-----Категории-----", "yellow");
-                    var categories = recipeService.GetAllCategories();
+                    var categories = categoryService.GetAllCategories();
                     foreach (var category in categories)
                     {
                         MCP.PrintNL($"{category.Id}. {category.Name}", "yellow");
@@ -243,7 +246,7 @@ namespace Recipe_Book.Views
                     {
                         case 1:
                             Console.WriteLine(new string('-', 50));
-                            var currentIngredients = recipeService.GetAllIngredients();
+                            var currentIngredients = ingredientService.GetAllIngredients();
                             foreach (var i in currentIngredients)
                             {
                                 Console.WriteLine($"{i.Id}. {i.Name}");
@@ -262,16 +265,17 @@ namespace Recipe_Book.Views
                                 MCP.PrintNL("Невалидно количество!", "red");
                                 continue;
                             }
-                            unitIds.Add(AddUnit());
+                            unitIds.Add(ChooseUnit());
                             break;
                         case 2:
                             Console.WriteLine(new string('-', 50));
                             Console.Write("Въведете име на съставката: ");
                             string ingredientName = Console.ReadLine();
                             Ingredient ingredient = new Ingredient() { Name = ingredientName };
-                            recipeService.AddIngredient(ingredient);
+                            ingredientService.AddIngredient(ingredient);
                             ingredientIds.Add(ingredient.Id);
 
+                            unitIds.Add(ChooseUnit());
                             Console.Write("Количество: ");
                             if (int.TryParse(Console.ReadLine(), out quantity))
                             {
@@ -282,7 +286,6 @@ namespace Recipe_Book.Views
                                 MCP.PrintNL("Невалидно количество!", "red");
                                 continue;
                             }
-                            unitIds.Add(AddUnit());
                             break;
                         case 3:
                             isAdding = false;
@@ -345,7 +348,7 @@ namespace Recipe_Book.Views
                 }
 
                 MCP.PrintNL("-----Категории-----", "yellow");
-                var categories = recipeService.GetAllCategories();
+                var categories = categoryService.GetAllCategories();
                 foreach (var category in categories)
                 {
                     MCP.PrintNL($"{category.Id}. {category.Name}", "yellow");
@@ -356,10 +359,61 @@ namespace Recipe_Book.Views
                 {
                     int choice  = int.Parse(input);
                     recipe.CategoryId = choice;
-                    recipe.Category = recipeService.GetCategoryById(choice);
+                    recipe.Category = categoryService.GetCategoryById(choice);
                 }
 
-                //Finish for ingredients
+                bool isUpdating = true;
+                while (isUpdating)
+                {
+                    Console.WriteLine("-----Редактиране на съставки-----");
+                    Console.WriteLine("1. Премахване на съставка");
+                    Console.WriteLine("2. Добавяне на нова съставка");
+                    Console.WriteLine("3. Край на редакцията на съставки");
+                    Console.Write("Изберете опция(1-3): ");
+                    int choice = int.Parse(Console.ReadLine());
+
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.WriteLine(new string('-', 50));
+                            var recipreIngredients = ingredientService.GetIngredientsByRecipe(recipe);
+                            foreach (var i in recipreIngredients)
+                            {
+                                Console.WriteLine($"{i.Id}. {i.Name}");
+                            }
+                            Console.Write("Изберете Id на съставката: ");
+                            int ingredientId = int.Parse(Console.ReadLine());
+                            if (recipreIngredients.Select(i => i.Id).Any(i=> i == ingredientId) == null)
+                            {
+                                MCP.PrintNL("Невалидно Id!", "red");
+                            }
+                            ingredientService.DeleteIngredient(ingredientId);
+                            break;
+
+                        case 2:
+                            Console.WriteLine(new string('-', 50));
+                            Console.Write("Въведете име на съставката: ");
+                            string ingredientName = Console.ReadLine();
+                            Ingredient ingredient = new Ingredient() { Name = ingredientName };
+                            ingredientService.AddIngredient(ingredient);
+                            int unitId = ChooseUnit();
+                            Console.Write("Количество: ");
+                            if (!int.TryParse(Console.ReadLine(), out int quantity))
+                            {
+                                MCP.PrintNL("Невалидно количество!", "red");
+                                continue;
+                            }
+                            ingredientService.AddIngredientToRecipeIngredients(recipe, ingredient.Id, quantity, unitId);
+                            break;
+                        case 3:
+                            isUpdating = false;
+                            break;
+                        default:
+                            MCP.PrintNL("Невалидна команда", "red");
+                            break;
+                    }
+                    
+                }
 
                 recipeService.UpdateRecipe();
                 MCP.PrintNL("Рецептата е успешно редактирана!", "green");
@@ -408,7 +462,7 @@ namespace Recipe_Book.Views
             while (true)
             {
                 Console.WriteLine("-----Избор на мярка------");
-                var units = recipeService.GetAllUnits();
+                var units = unitService.GetAllUnits();
                 foreach (var unit in units)
                 {
                     Console.WriteLine($"{unit.Id} {unit.Name}");
