@@ -18,6 +18,9 @@ namespace Recipe_Book.Views
         public Display()
         {
             this.recipeService = new RecipeService();
+            this.ingredientService = new IngredientService();
+            this.categoryService = new CategoryService();
+            this.unitService = new UnitService();
         }
 
         public void ShowMenu()
@@ -447,7 +450,7 @@ namespace Recipe_Book.Views
             foreach (var recipe in recipes)
             {
                 MCP.PrintNL("|" + new string('-', 150) + "|", color);
-                MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Author: {recipe.Author} | Date: {recipe.AddDate} | Category: {recipe.Category.Name} | Ingredients: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity} {ri.Unit.Name}"))} |", color);
+                MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Author: {recipe.Author} | Date: {recipe.AddDate} | Category: {recipe.Category.Name} | Ingredients: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity:0.00} {ri.Unit.Name}"))} |", color);
             }
             MCP.PrintNL("|" + new string('-', 150) + "|", color);
         }

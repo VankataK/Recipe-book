@@ -23,7 +23,7 @@ namespace Recipe_Book.Services
             recipe.AddDate = DateTime.Now;
             for (int i = 0; i < ingredientsIds.Count; i++)
             {
-                recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientsIds[i], Quantity = quantities[i], UnitId = unitsIds[i] });
+                recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientsIds[i], Quantity = quantities[i], UnitId = unitsIds[i], Unit = _context.Units.Find(unitsIds[i]) });
             }
 
             _context.Recipes.Add(recipe);
