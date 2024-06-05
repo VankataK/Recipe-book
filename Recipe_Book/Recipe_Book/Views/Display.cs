@@ -93,6 +93,10 @@ namespace Recipe_Book.Views
         {
             MCP.PrintNL("Показване на списъка с всички рецепти: ", "red");
             var recipes = recipeService.GetAllRecipes();
+            if (recipes.Count == 0)
+            {
+                MCP.PrintNL("Няма рецепти", "red");
+            }
 
             ShowRecipesInColor(recipes, "yellow");
         }
