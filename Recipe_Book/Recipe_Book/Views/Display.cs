@@ -11,6 +11,9 @@ namespace Recipe_Book.Views
     {
 
         private readonly RecipeService recipeService;
+        private readonly IngredientService ingredientService;
+        private readonly CategoryService categoryService;
+        private readonly UnitService unitService;
 
         public Display()
         {
@@ -96,7 +99,7 @@ namespace Recipe_Book.Views
             try
             {
                 MCP.PrintNL("-----Категории-----", "yellow");
-                var categories = recipeService.GetAllCategories();
+                var categories = categoryService.GetAllCategories();
                 foreach (var category in categories)
                 {
                     MCP.PrintNL($"{category.Id}. {category.Name}", "yellow");
@@ -126,7 +129,7 @@ namespace Recipe_Book.Views
             try
             {
                 MCP.PrintNL("-----Съставки-----", "yellow");
-                var ingredients = recipeService.GetAllIngredients();
+                var ingredients = ingredientService.GetAllIngredients();
                 foreach (var ingredient in ingredients)
                 {
                     MCP.PrintNL($"{ingredient.Id}. {ingredient.Name}", "yellow");
@@ -157,7 +160,7 @@ namespace Recipe_Book.Views
             try
             {
                 MCP.PrintNL("-----Съставки-----", "yellow");
-                var ingredients = recipeService.GetAllIngredients();
+                var ingredients = ingredientService.GetAllIngredients();
                 foreach (var ingredient in ingredients)
                 {
                     MCP.PrintNL($"{ingredient.Id}. {ingredient.Name}", "yellow");
@@ -213,7 +216,7 @@ namespace Recipe_Book.Views
                 while (true)
                 {
                     MCP.PrintNL("-----Категории-----", "yellow");
-                    var categories = recipeService.GetAllCategories();
+                    var categories = categoryService.GetAllCategories();
                     foreach (var category in categories)
                     {
                         MCP.PrintNL($"{category.Id}. {category.Name}", "yellow");
@@ -240,7 +243,7 @@ namespace Recipe_Book.Views
                     {
                         case 1:
                             Console.WriteLine(new string('-', 50));
-                            var currentIngredients = recipeService.GetAllIngredients();
+                            var currentIngredients = ingredientService.GetAllIngredients();
                             foreach (var i in currentIngredients)
                             {
                                 Console.WriteLine($"{i.Id}. {i.Name}");
@@ -266,7 +269,7 @@ namespace Recipe_Book.Views
                             Console.Write("Въведете име на съставката: ");
                             string ingredientName = Console.ReadLine();
                             Ingredient ingredient = new Ingredient() { Name = ingredientName };
-                            recipeService.AddIngredient(ingredient);
+                            ingredientService.AddIngredient(ingredient);
                             ingredientIds.Add(ingredient.Id);
 
                             unitIds.Add(ChooseUnit());
@@ -342,7 +345,7 @@ namespace Recipe_Book.Views
                 }
 
                 MCP.PrintNL("-----Категории-----", "yellow");
-                var categories = recipeService.GetAllCategories();
+                var categories = categoryService.GetAllCategories();
                 foreach (var category in categories)
                 {
                     MCP.PrintNL($"{category.Id}. {category.Name}", "yellow");
@@ -353,7 +356,7 @@ namespace Recipe_Book.Views
                 {
                     int choice  = int.Parse(input);
                     recipe.CategoryId = choice;
-                    recipe.Category = recipeService.GetCategoryById(choice);
+                    recipe.Category = categoryService.GetCategoryById(choice);
                 }
 
                 bool isUpdating = true;
@@ -370,7 +373,7 @@ namespace Recipe_Book.Views
                     {
                         case 1:
                             Console.WriteLine(new string('-', 50));
-                            var recipreIngredients = recipeService.GetIngredientsByRecipe(recipe);
+                            var recipreIngredients = ingredientService.GetIngredientsByRecipe(recipe);
                             foreach (var i in recipreIngredients)
                             {
                                 Console.WriteLine($"{i.Id}. {i.Name}");
@@ -381,7 +384,7 @@ namespace Recipe_Book.Views
                             {
                                 MCP.PrintNL("Невалидно Id!", "red");
                             }
-                            recipeService.DeleteIngredient(ingredientId);
+                            ingredientService.DeleteIngredient(ingredientId);
                             break;
 
                         case 2:
@@ -389,7 +392,7 @@ namespace Recipe_Book.Views
                             Console.Write("Въведете име на съставката: ");
                             string ingredientName = Console.ReadLine();
                             Ingredient ingredient = new Ingredient() { Name = ingredientName };
-                            recipeService.AddIngredient(ingredient);
+                            ingredientService.AddIngredient(ingredient);
                             int unitId = ChooseUnit();
                             Console.Write("Количество: ");
                             if (!int.TryParse(Console.ReadLine(), out int quantity))
@@ -397,7 +400,7 @@ namespace Recipe_Book.Views
                                 MCP.PrintNL("Невалидно количество!", "red");
                                 continue;
                             }
-                            recipeService.AddIngredientToRecipeIngredients(recipe, ingredient.Id, quantity, unitId);
+                            ingredientService.AddIngredientToRecipeIngredients(recipe, ingredient.Id, quantity, unitId);
                             break;
                         case 3:
                             isUpdating = false;
@@ -456,7 +459,7 @@ namespace Recipe_Book.Views
             while (true)
             {
                 Console.WriteLine("-----Избор на мярка------");
-                var units = recipeService.GetAllUnits();
+                var units = unitService.GetAllUnits();
                 foreach (var unit in units)
                 {
                     Console.WriteLine($"{unit.Id} {unit.Name}");

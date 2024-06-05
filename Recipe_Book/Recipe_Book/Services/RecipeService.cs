@@ -69,56 +69,5 @@ namespace Recipe_Book.Services
                 .Where(r => r.RecipeIngredients.Any(ri => ingredientIds.Contains(ri.Ingredient.Id)))
                 .ToList();
         }
-
-        public void AddIngredient(Ingredient ingredient)
-        {
-            _context.Ingredients.Add(ingredient);
-            _context.SaveChanges();
-        }
-        public void AddIngredientToRecipeIngredients(Recipe recipe, int ingredientId, decimal quantity, int unitId)
-        {
-            recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientId, Quantity = quantity, UnitId = unitId});
-            _context.SaveChanges();
-        }
-        public void DeleteIngredient(int id)
-        {
-            var ingredient = _context.Ingredients.Find(id);
-            if (ingredient != null)
-            {
-                _context.Ingredients.Remove(ingredient);
-                _context.SaveChanges();
-            }
-        }
-        public Ingredient GetIngredientById(int id)
-        {
-            return _context.Ingredients.Find(id);
-        }
-        public List<Ingredient> GetIngredientsByRecipe(Recipe recipe)
-        {
-            return _context.RecipeIngredients.Where(ri=> ri.Recipe.Equals(recipe)).Select(ri=> ri.Ingredient).ToList();
-        }
-        public List<Ingredient> GetAllIngredients()
-        {
-            return _context.Ingredients.ToList();
-        }
-
-        public void AddCategory(Category category) 
-        {
-            _context.Categories.Add(category);
-            _context.SaveChanges();
-        }
-        public List<Category> GetAllCategories()
-        {
-            return _context.Categories.ToList();
-        }
-        public Category GetCategoryById(int categoryId)
-        {
-            return _context.Categories.FirstOrDefault(c => c.Id == categoryId);
-        }
-        
-        public List<Unit> GetAllUnits()
-        {
-            return _context.Units.ToList();
-        }
     }
 }
