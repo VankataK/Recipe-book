@@ -43,7 +43,7 @@ namespace Recipe_Book.Tests
         public void Setup()
         {
             _fakeRecipeService = new FakeRecipeService();
-            _display = new Display(_fakeRecipeService);
+            _display = new Display();
         }
 
         
