@@ -9,12 +9,17 @@ namespace Recipe_Book.Views
 
     public class Display
     {
-
         private readonly RecipeService recipeService;
+        private RecipeService @object;
 
         public Display()
         {
             this.recipeService = new RecipeService();
+        }
+
+        public Display(RecipeService @object)
+        {
+            this.@object = @object;
         }
 
         public void ShowMenu()
@@ -91,7 +96,7 @@ namespace Recipe_Book.Views
             ShowRecipesInColor(recipes, "yellow");
         }
 
-        private void SearchRecipeByCategory()
+        public void SearchRecipeByCategory()
         {
             try
             {
@@ -121,7 +126,7 @@ namespace Recipe_Book.Views
             }
         }
 
-        private void SearchRecipeByIngredient()
+        public void SearchRecipeByIngredient()
         {
             try
             {
@@ -192,7 +197,7 @@ namespace Recipe_Book.Views
             }
         }
 
-        private void AddNewRecipe()
+        public void AddNewRecipe()
         {
             try
             {
