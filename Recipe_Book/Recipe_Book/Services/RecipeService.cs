@@ -69,38 +69,5 @@ namespace Recipe_Book.Services
                 .Where(r => r.RecipeIngredients.Any(ri => ingredientIds.Contains(ri.Ingredient.Id)))
                 .ToList();
         }
-
-        public void AddIngredient(Ingredient ingredient)
-        {
-            _context.Ingredients.Add(ingredient);
-            _context.SaveChanges();
-        }
-        public Ingredient GetIngredientById(int id)
-        {
-            return _context.Ingredients.Find(id);
-        }
-        public List<Ingredient> GetAllIngredients()
-        {
-            return _context.Ingredients.ToList();
-        }
-
-        public void AddCategory(Category category) 
-        {
-            _context.Categories.Add(category);
-            _context.SaveChanges();
-        }
-        public List<Category> GetAllCategories()
-        {
-            return _context.Categories.ToList();
-        }
-        public Category GetCategoryById(int categoryId)
-        {
-            return _context.Categories.FirstOrDefault(c => c.Id == categoryId);
-        }
-        
-        public List<Unit> GetAllUnits()
-        {
-            return _context.Units.ToList();
-        }
     }
 }

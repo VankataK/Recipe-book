@@ -9,8 +9,8 @@ namespace Recipe_Book.Data
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-        public DbSet<Unit> Units { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Unit> Units { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

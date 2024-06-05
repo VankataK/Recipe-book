@@ -10,17 +10,12 @@ namespace Recipe_Book.Views
     public class Display
     {
         private readonly RecipeService recipeService;
-        private RecipeService @object;
 
         public Display()
         {
             this.recipeService = new RecipeService();
         }
 
-        public Display(RecipeService @object)
-        {
-            this.@object = @object;
-        }
 
         public void ShowMenu()
         {
