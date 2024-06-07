@@ -16,14 +16,14 @@ namespace Recipe_Book.Services
 
         public List<Recipe> GetAllRecipes()
         {
-            return _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(r => r.Category).ToList();
+            return _context.Recipes.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Unit).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(r => r.Category).ToList();
         }
         public void AddRecipe(Recipe recipe, List<int> ingredientsIds, List<decimal> quantities, List<int> unitsIds)
         {
             recipe.AddDate = DateTime.Now;
             for (int i = 0; i < ingredientsIds.Count; i++)
             {
-                recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientsIds[i], Quantity = quantities[i], UnitId = unitsIds[i], Unit = _context.Units.Find(unitsIds[i]) });
+                recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientsIds[i], Quantity = quantities[i], UnitId = unitsIds[i]});
             }
 
             _context.Recipes.Add(recipe);

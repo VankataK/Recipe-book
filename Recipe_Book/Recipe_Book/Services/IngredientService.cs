@@ -24,7 +24,7 @@ namespace Recipe_Book.Services
         }
         public void AddIngredientToRecipeIngredients(Recipe recipe, int ingredientId, decimal quantity, int unitId)
         {
-            recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientId, Quantity = quantity, UnitId = unitId, Unit = _context.Units.Find(unitId) });
+            recipe.RecipeIngredients.Add(new RecipeIngredient { IngredientId = ingredientId, Quantity = quantity, UnitId = unitId});
             _context.SaveChanges();
         }
         public void DeleteIngredient(int id)

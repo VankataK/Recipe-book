@@ -255,9 +255,16 @@ namespace Recipe_Book.Views
                             {
                                 Console.WriteLine($"{i.Id}. {i.Name}");
                             }
-                            Console.Write("Изберете Id на съставката: ");
-                            int ingredientId = int.Parse(Console.ReadLine());
+                            
+                            Console.Write("Изберете Id на съставката (или остави празно за стъпка назад): ");
+                            if (!int.TryParse(Console.ReadLine(),out int ingredientId))
+                            {
+                                break;
+                            }
+                           
                             ingredientIds.Add(ingredientId);
+                            
+                            unitIds.Add(ChooseUnit());
 
                             Console.Write("Въведете количество: ");
                             if (int.TryParse(Console.ReadLine(), out int quantity))
@@ -269,7 +276,6 @@ namespace Recipe_Book.Views
                                 MCP.PrintNL("Невалидно количество!", "red");
                                 continue;
                             }
-                            unitIds.Add(ChooseUnit());
                             break;
                         case 2:
                             Console.WriteLine(new string('-', 50));
@@ -454,7 +460,7 @@ namespace Recipe_Book.Views
             foreach (var recipe in recipes)
             {
                 MCP.PrintNL("|" + new string('-', 150) + "|", color);
-                MCP.PrintNL($"|ID: {recipe.Id} | Name: {recipe.Name} | Description: {recipe.Description} | Author: {recipe.Author} | Date: {recipe.AddDate} | Category: {recipe.Category.Name} | Ingredients: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity:0.00} {ri.Unit.Name}"))} |", color);
+                MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Начин на приготвяне: {recipe.Description} | Автор: {recipe.Author} | Дата на добавяне: {recipe.AddDate} | Категория: {recipe.Category.Name} | Съставки: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity:0.00} {ri.Unit.Name}"))} |", color);
             }
             MCP.PrintNL("|" + new string('-', 150) + "|", color);
         }

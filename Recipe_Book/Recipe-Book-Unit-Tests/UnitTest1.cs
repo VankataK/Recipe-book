@@ -59,7 +59,7 @@ namespace Recipe_Book.Tests
             };
             _fakeRecipeService.Recipes = new List<Recipe>();
 
-            // Mock Console input
+            
             using (var sw = new StringWriter())
             {
                 Console.SetOut(sw);
