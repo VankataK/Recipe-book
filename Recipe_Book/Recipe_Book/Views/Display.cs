@@ -21,6 +21,8 @@ namespace Recipe_Book.Views
             this.ingredientService = new IngredientService();
             this.categoryService = new CategoryService();
             this.unitService = new UnitService();
+            categoryService.AddCategoriesToDB();
+            unitService.AddUnitsToDB();
         }
 
         public void ShowMenu()
@@ -242,10 +244,11 @@ namespace Recipe_Book.Views
                     Console.WriteLine("-----Избор на съставки-----");
                     Console.WriteLine("1. Избор от наличните съставки");
                     Console.WriteLine("2. Добавяне на нова съставка");
-                    Console.WriteLine("3. Край на добавянето на съставки");
-                    Console.Write("Изберете опция(1-3): ");
-                    int choice = int.Parse(Console.ReadLine());
-
+                    Console.Write("Изберете опция (или празно за край): ");
+                    if (!int.TryParse(Console.ReadLine(),out int choice))
+                    {
+                        break;
+                    }
                     switch (choice)
                     {
                         case 1:
@@ -297,11 +300,8 @@ namespace Recipe_Book.Views
                                 continue;
                             }
                             break;
-                        case 3:
-                            isAdding = false;
-                            break;
                         default:
-                            MCP.PrintNL("Невалидна команда", "red");
+                            isAdding = false;
                             break;
                     }
                     
@@ -373,14 +373,18 @@ namespace Recipe_Book.Views
                 }
 
                 bool isUpdating = true;
+
                 while (isUpdating)
                 {
                     Console.WriteLine("-----Редактиране на съставки-----");
                     Console.WriteLine("1. Премахване на съставка");
                     Console.WriteLine("2. Добавяне на нова съставка");
-                    Console.WriteLine("3. Край на редакцията на съставки");
-                    Console.Write("Изберете опция(1-3): ");
-                    int choice = int.Parse(Console.ReadLine());
+                    Console.Write("Изберете опция(или остави празно за край): ");
+
+                    if (!int.TryParse(Console.ReadLine(), out int choice))
+                    {
+                        break;
+                    }
 
                     switch (choice)
                     {
@@ -415,11 +419,8 @@ namespace Recipe_Book.Views
                             }
                             ingredientService.AddIngredientToRecipeIngredients(recipe, ingredient.Id, quantity, unitId);
                             break;
-                        case 3:
-                            isUpdating = false;
-                            break;
                         default:
-                            MCP.PrintNL("Невалидна команда", "red");
+                            isUpdating = false;
                             break;
                     }
                     

@@ -11,12 +11,23 @@ namespace Recipe_Book.Services
     internal class CategoryService
     {
         private readonly DBConnect _context;
-
+        private readonly List<string> categoriesNames = new List<string> { "Предястие", "Салата", "Основно", "Десерт", "Закуска", "Тестено изделие", "Разядка"};
         public CategoryService()
         {
             _context = new DBConnect();
         }
 
+        public void AddCategoriesToDB()
+        {
+            foreach (var categoryName in categoriesNames)
+            {
+                if (!_context.Categories.Select(c => c.Name).Contains(categoryName))
+                {
+                    _context.Categories.Add(new Category { Name = categoryName });
+                }
+            }
+            _context.SaveChanges();
+        }
         public Category GetCategoryById(int categoryId)
         {
             return _context.Categories.FirstOrDefault(c => c.Id == categoryId);
