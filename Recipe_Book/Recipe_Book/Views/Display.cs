@@ -118,7 +118,7 @@ namespace Recipe_Book.Views
                     throw new Exception();
                 }
                 var recipes = recipeService.GetRecipesByCategory(choice);
-                if (recipes == null)
+                if (recipes.Count == 0)
                 {
                     MCP.PrintNL("Няма рецепти в тази категория!", "yellow");
                     return;
@@ -148,7 +148,7 @@ namespace Recipe_Book.Views
                     throw new Exception();
                 }
                 var recipes = recipeService.GetRecipesByIngredient(choice);
-                if (recipes == null)
+                if (recipes.Count == 0)
                 {
                     MCP.PrintNL("Няма рецепти с тази съставка!", "yellow");
                     return;
@@ -188,7 +188,7 @@ namespace Recipe_Book.Views
                 }
 
                 var recipes = recipeService.GetRecipesByMultipleIngredients(ingredientIds);
-                if (recipes == null)
+                if (recipes.Count == 0)
                 {
                     MCP.PrintNL("Няма рецепти с тези съставки!", "yellow");
                     return;
@@ -446,7 +446,7 @@ namespace Recipe_Book.Views
                 int id = int.Parse(Console.ReadLine());
 
                 recipeService.DeleteRecipe(id);
-                MCP.PrintNL("Изтрита рецепта!", "red");
+                MCP.PrintNL("Успешно изтрита рецепта!", "green");
             }
             catch (Exception)
             {
@@ -457,12 +457,21 @@ namespace Recipe_Book.Views
 
         public void ShowRecipesInColor(List<Recipe> recipes, string color)
         {
+            int maxLength = recipes.Select(r=> r.Description.Length).Max()+30;
+            MCP print = new MCP(color, maxLength, "left", "|", "|");
             foreach (var recipe in recipes)
             {
-                MCP.PrintNL("|" + new string('-', 150) + "|", color);
-                MCP.PrintNL($"|ID: {recipe.Id} | Име: {recipe.Name} | Начин на приготвяне: {recipe.Description} | Автор: {recipe.Author} | Дата на добавяне: {recipe.AddDate} | Категория: {recipe.Category.Name} | Съставки: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity:0.00} {ri.Unit.Name}"))} |", color);
+                print.PrintNL(new string('-', maxLength));
+                print.PrintNL($"ID: {recipe.Id}");
+                print.PrintNL($"Име: {recipe.Name}");
+                print.PrintNL($"Начин на приготвяне: {recipe.Description}");
+                print.PrintNL($"Автор: {recipe.Author}");
+                print.PrintNL($"Дата на добавяне: {recipe.AddDate}");
+                print.PrintNL($"Категория: {recipe.Category.Name}");
+                print.PrintNL($"Съставки: {string.Join(", ", recipe.RecipeIngredients.Select(ri => $"{ri.Ingredient.Name} {ri.Quantity:0.00} {ri.Unit.Name}"))}");
+
             }
-            MCP.PrintNL("|" + new string('-', 150) + "|", color);
+            print.PrintNL(new string('-', maxLength));
         }
 
         public int ChooseUnit()
