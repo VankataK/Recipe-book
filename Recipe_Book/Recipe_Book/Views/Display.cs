@@ -98,6 +98,7 @@ namespace Recipe_Book.Views
             if (recipes.Count == 0)
             {
                 MCP.PrintNL("Няма рецепти", "red");
+                return;
             }
 
             ShowRecipesInColor(recipes, "yellow");
