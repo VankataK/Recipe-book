@@ -23,7 +23,7 @@ namespace Recipe_Book.Services
             {
                 if (!_context.Categories.Select(c => c.Name).Contains(categoryName))
                 {
-                    _context.Categories.Add(new Category { Name = categoryName });
+                    _context.Categories.Add(new Category { Id = categoriesNames.IndexOf(categoryName), Name = categoryName });
                 }
             }
             _context.SaveChanges();
