@@ -12,6 +12,8 @@ namespace Recipe_Book.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Unit> Units { get; set; }
 
+        public DBConnect(DbContextOptions<DBConnect> options) : base(options) { }
+        public DBConnect() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql("server=localhost;database=recipebook;user=root;password=;Convert Zero Datetime=True",

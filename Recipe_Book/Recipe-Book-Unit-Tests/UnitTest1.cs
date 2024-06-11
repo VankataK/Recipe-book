@@ -1,128 +1,189 @@
-using NUnit.Framework;
+using Microsoft.EntityFrameworkCore;
+using Recipe_Book.Data;
 using Recipe_Book.Models;
 using Recipe_Book.Services;
-using Recipe_Book.Views;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Recipe_Book.Tests
 {
-    public class FakeRecipeService : RecipeService
-    {
-        public List<Recipe> Recipes { get; set; } = new List<Recipe>();
-        public List<Category> Categories { get; set; } = new List<Category>();
-        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
-        public List<Unit> Units { get; set; } = new List<Unit>();
-
-        public void AddRecipe(Recipe recipe, List<int> ingredientIds, List<decimal> quantities, List<int> unitIds)
-        {
-            Recipes.Add(recipe);
-        }
-
-        public List<Category> GetAllCategories() => Categories;
-
-        public List<Ingredient> GetAllIngredients() => Ingredients;
-
-        public List<Unit> GetAllUnits() => Units;
-
-        public List<Recipe> GetAllRecipes() => Recipes;
-
-        public List<Recipe> GetRecipesByCategory(int categoryId) => Recipes;
-
-        public List<Recipe> GetRecipesByIngredient(int ingredientId) => Recipes;
-    }
-
     [TestFixture]
-    public class DisplayTests
+    public class RecipeServiceTests
     {
-        private FakeRecipeService _fakeRecipeService;
-        private Display _display;
+        private RecipeService recipeService;
+        private DBConnect _context;
 
         [SetUp]
         public void Setup()
         {
-            _fakeRecipeService = new FakeRecipeService();
-            _display = new Display();
+            var options = new DbContextOptionsBuilder<DBConnect>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            _context = new DBConnect(options);
+            _context.Database.EnsureCreated();
+
+            recipeService = new RecipeService(_context);
         }
 
-        
+        [TearDown]
+        public void TearDown()
+        {
+            _context.Database.EnsureDeleted();
+            _context.Dispose();
+        }
 
         [Test]
-        public void SearchRecipeByCategory_ValidCategory_ShouldCallGetRecipesByCategory()
+        public void GetAllRecipes_ShouldReturnAllRecipes()
         {
-            // Arrange
-            int categoryId = 1;
-            _fakeRecipeService.Categories = new List<Category>
+            _context.Recipes.Add(new Recipe { Name = "Рецепта1", Description = "Начин на приготвяне 1" });
+            _context.Recipes.Add(new Recipe { Name = "Рецепта2", Description = "Начин на приготвяне 2" });
+            _context.SaveChanges();
+
+            var result = recipeService.GetAllRecipes();
+
+            Assert.That(result.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void GetRecipeById_ShouldReturnCorrectRecipe()
+        {
+            var recipe = new Recipe { Id = 1, Name = "Рецепта", Description = "Начин на приготвяне" };
+            _context.Recipes.Add(recipe);
+            _context.SaveChanges();
+
+            var result = recipeService.GetRecipeById(1);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Name, Is.EqualTo("Рецепта"));
+        }
+
+        [Test]
+        public void GetRecipeById_InvalidId_ShouldReturnNull()
+        {
+            var result = recipeService.GetRecipeById(99);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void UpdateRecipe_ShouldUpdateRecipeDetails()
+        {
+            var recipe = new Recipe { Id = 1, Name = "Стара репецта", Description = "Стар начин на приготвяне" };
+            _context.Recipes.Add(recipe);
+            _context.SaveChanges();
+
+            recipe.Name = "Нова рецепта";
+            recipe.Description = "Нов начин на приготвяне";
+            recipeService.UpdateRecipe();
+
+            var updatedRecipe = _context.Recipes.FirstOrDefault(r => r.Id == 1);
+            Assert.That(updatedRecipe, Is.Not.Null);
+            Assert.That(updatedRecipe.Name, Is.EqualTo("Нова рецепта"));
+            Assert.That(updatedRecipe.Description, Is.EqualTo("Нов начин на приготвяне"));
+        }
+
+        [Test]
+        public void DeleteRecipe_ShouldRemoveRecipe()
+        {
+            var recipe = new Recipe { Id = 1, Name = "Рецепта за изтриване", Description = "Начин на приготвяне" };
+            _context.Recipes.Add(recipe);
+            _context.SaveChanges();
+
+            recipeService.DeleteRecipe(1);
+
+            var result = _context.Recipes.FirstOrDefault(r => r.Id == 1);
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void AddRecipeWithIngredients_ShouldAddRecipeAndIngredients()
+        {
+            List<int> ingredientIds = new List<int>() { 1, 2 };
+            List<decimal> quantities = new List<decimal>() { 10, 20 };
+            List<int> unitIds = new List<int>() { 1, 3 };
+            var recipe = new Recipe
             {
-                new Category { Id = categoryId, Name = "Desserts" }
+                Name = "Рецепта",
+                Description = "Начин на приготвяне",
+                Author = "Автор",
+                CategoryId = 1
             };
-            _fakeRecipeService.Recipes = new List<Recipe>();
 
-            
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                using (var sr = new StringReader($"{categoryId}\n"))
-                {
-                    Console.SetIn(sr);
+            recipeService.AddRecipe(recipe, ingredientIds, quantities, unitIds);
 
-                    // Act
-                    _display.SearchRecipeByCategory();
-                }
-            }
+            var result = _context.Recipes.FirstOrDefault(r => r.Name == "Рецепта");
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RecipeIngredients.Count, Is.EqualTo(2));
+        }
+    }
+
+    [TestFixture]
+    public class CategoryServiceTests
+    {
+        private DBConnect _context;
+        private CategoryService _categoryService;
+
+        [SetUp]
+        public void Setup()
+        {
+            var options = new DbContextOptionsBuilder<DBConnect>()
+                .UseInMemoryDatabase(databaseName: "ТердтоваБаза")
+                .Options;
+
+            _context = new DBConnect(options);
+            _context.Database.EnsureCreated();
+
+            _categoryService = new CategoryService(_context);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _context.Database.EnsureDeleted();
+            _context.Dispose();
         }
 
         [Test]
-        public void SearchRecipeByIngredient_ValidIngredient_ShouldCallGetRecipesByIngredient()
+        public void AddCategoriesToDB_ShouldAddAllCategories()
         {
-            // Arrange
-            int ingredientId = 1;
-            _fakeRecipeService.Ingredients = new List<Ingredient>
-            {
-                new Ingredient { Id = ingredientId, Name = "Sugar" }
-            };
-            _fakeRecipeService.Recipes = new List<Recipe>();
+            _categoryService.AddCategoriesToDB();
 
-            // Mock Console input
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                using (var sr = new StringReader($"{ingredientId}\n"))
-                {
-                    Console.SetIn(sr);
+            var categories = _context.Categories.ToList();
 
-                    // Act
-                    _display.SearchRecipeByIngredient();
-                }
-            }
-
-            
+            Assert.That(categories.Count, Is.EqualTo(7));
+            Assert.That(categories.Any(c => c.Name == "Предястие"), Is.True);
         }
 
         [Test]
-        public void AddNewRecipe_ShouldCallAddRecipe()
+        public void GetCategoryById_ShouldReturnCorrectCategory()
         {
-            // Arrange
-            var categories = new List<Category> { new Category { Id = 1, Name = "Desserts" } };
-            var ingredients = new List<Ingredient> { new Ingredient { Id = 1, Name = "Sugar" } };
-            var units = new List<Unit> { new Unit { Id = 1, Name = "Grams" } };
+            var category = new Category { Name = "TestCategory" };
+            _context.Categories.Add(category);
+            _context.SaveChanges();
 
-            _fakeRecipeService.Categories = categories;
-            _fakeRecipeService.Ingredients = ingredients;
-            _fakeRecipeService.Units = units;
+            var result = _categoryService.GetCategoryById(category.Id);
 
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                using (var sr = new StringReader("Chocolate Cake\nBake it well\nJohn Doe\n1\n1\n500\n1\n\n\n"))
-                {
-                    Console.SetIn(sr);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Name, Is.EqualTo("TestCategory"));
+        }
 
-                    // Act
-                    _display.AddNewRecipe();
-                }
-            }
+        [Test]
+        public void GetAllCategories_ShouldReturnAllCategories()
+        {
+            _context.Categories.Add(new Category { Name = "Category1" });
+            _context.Categories.Add(new Category { Name = "Category2" });
+            _context.SaveChanges();
+
+            var result = _categoryService.GetAllCategories();
+
+            Assert.That(result.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void GetCategoryById_InvalidId_ShouldReturnNull()
+        {
+            var result = _categoryService.GetCategoryById(99);
+
+            Assert.That(result, Is.Not.Null);
         }
     }
 }

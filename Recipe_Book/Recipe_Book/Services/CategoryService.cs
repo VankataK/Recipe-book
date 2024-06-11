@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace Recipe_Book.Services
 {
-    internal class CategoryService
+    public class CategoryService
     {
         private readonly DBConnect _context;
         private readonly List<string> categoriesNames = new List<string> { "Предястие", "Салата", "Основно", "Десерт", "Закуска", "Тестено изделие", "Разядка"};
         public CategoryService()
         {
             _context = new DBConnect();
+        }
+        public CategoryService(DBConnect db)
+        {
+            _context = db;
         }
 
         public void AddCategoriesToDB()

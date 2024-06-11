@@ -13,6 +13,10 @@ namespace Recipe_Book.Services
         {
             _context = new DBConnect();
         }
+        public RecipeService(DBConnect db)
+        {
+            _context = db;
+        }
 
         public List<Recipe> GetAllRecipes()
         {
