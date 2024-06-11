@@ -16,8 +16,11 @@ namespace Recipe_Book.Data
         public DBConnect() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("server=localhost;database=recipebook;user=root;password=;Convert Zero Datetime=True",
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql("server=localhost;database=recipebook;user=root;password=;Convert Zero Datetime=True",
                 new MySqlServerVersion(new Version(10, 4, 27)));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

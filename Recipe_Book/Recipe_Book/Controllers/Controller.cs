@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Recipe_Book.Data;
-using Recipe_Book.Services;
+﻿using Recipe_Book.Data;
 using Recipe_Book.Views;
 
 namespace Recipe_Book.Controllers

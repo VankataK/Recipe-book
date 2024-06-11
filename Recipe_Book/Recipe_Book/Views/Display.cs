@@ -3,7 +3,6 @@ using Recipe_Book.Models;
 using System.Text;
 using CustomPrint;
 
-
 namespace Recipe_Book.Views
 {
     public class Display

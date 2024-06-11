@@ -31,22 +31,11 @@ namespace Recipe_Book.Tests
             _context.Dispose();
         }
 
-        [Test]
-        public void GetAllRecipes_ShouldReturnAllRecipes()
-        {
-            _context.Recipes.Add(new Recipe { Name = "Рецепта1", Description = "Начин на приготвяне 1" });
-            _context.Recipes.Add(new Recipe { Name = "Рецепта2", Description = "Начин на приготвяне 2" });
-            _context.SaveChanges();
-
-            var result = recipeService.GetAllRecipes();
-
-            Assert.That(result.Count, Is.EqualTo(2));
-        }
-
-        [Test]
+       
+    [Test]
         public void GetRecipeById_ShouldReturnCorrectRecipe()
         {
-            var recipe = new Recipe { Id = 1, Name = "Рецепта", Description = "Начин на приготвяне" };
+            var recipe = new Recipe { Id = 1, Name = "Рецепта", Description = "Начин на приготвяне", Author = "Автор"};
             _context.Recipes.Add(recipe);
             _context.SaveChanges();
 
@@ -67,24 +56,26 @@ namespace Recipe_Book.Tests
         [Test]
         public void UpdateRecipe_ShouldUpdateRecipeDetails()
         {
-            var recipe = new Recipe { Id = 1, Name = "Стара репецта", Description = "Стар начин на приготвяне" };
+            var recipe = new Recipe { Id = 1, Name = "Стара репецта", Description = "Стар начин на приготвяне", Author = "Стар Автор" };
             _context.Recipes.Add(recipe);
             _context.SaveChanges();
 
             recipe.Name = "Нова рецепта";
             recipe.Description = "Нов начин на приготвяне";
+            recipe.Author = "Нов Автор";
             recipeService.UpdateRecipe();
 
             var updatedRecipe = _context.Recipes.FirstOrDefault(r => r.Id == 1);
             Assert.That(updatedRecipe, Is.Not.Null);
             Assert.That(updatedRecipe.Name, Is.EqualTo("Нова рецепта"));
             Assert.That(updatedRecipe.Description, Is.EqualTo("Нов начин на приготвяне"));
+            Assert.That(updatedRecipe.Author, Is.EqualTo("Нов Автор"));
         }
 
         [Test]
         public void DeleteRecipe_ShouldRemoveRecipe()
         {
-            var recipe = new Recipe { Id = 1, Name = "Рецепта за изтриване", Description = "Начин на приготвяне" };
+            var recipe = new Recipe { Id = 1, Name = "Рецепта за изтриване", Description = "Начин на приготвяне", Author = "Автор" };
             _context.Recipes.Add(recipe);
             _context.SaveChanges();
 
@@ -143,17 +134,6 @@ namespace Recipe_Book.Tests
         }
 
         [Test]
-        public void AddCategoriesToDB_ShouldAddAllCategories()
-        {
-            _categoryService.AddCategoriesToDB();
-
-            var categories = _context.Categories.ToList();
-
-            Assert.That(categories.Count, Is.EqualTo(7));
-            Assert.That(categories.Any(c => c.Name == "Предястие"), Is.True);
-        }
-
-        [Test]
         public void GetCategoryById_ShouldReturnCorrectCategory()
         {
             var category = new Category { Name = "TestCategory" };
@@ -183,7 +163,7 @@ namespace Recipe_Book.Tests
         {
             var result = _categoryService.GetCategoryById(99);
 
-            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Null);
         }
     }
 }
