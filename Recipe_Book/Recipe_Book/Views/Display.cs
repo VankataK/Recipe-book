@@ -25,67 +25,75 @@ namespace Recipe_Book.Views
 
         public void ShowMenu()
         {
-            Console.OutputEncoding = Encoding.UTF8;
-            bool exit = false;
-            int choice;
-            while (!exit)
+            try
             {
-                MCP.PrintNL(" " + new string('*', 101), "green");
-                MCP.PrintNL(" *" + new string(' ', 99) + "*", "green");
-                MCP.PrintNL(" *" + new string(' ', 41)+"Каталог с рецепти".ToUpper()+ new string(' ', 41) + "*", "green");
-                MCP.PrintNL(" *" + new string(' ', 99) + "*", "green");
-                MCP.PrintNL(" " + new string('*', 101), "green");
-
-
-                MCP.PrintNL(" 1. ПОКАЖИ ВСИЧКИ РЕЦЕПТИ", "cyan");
-                MCP.PrintNL(" 2. ТЪРСИ РЕЦЕПТИ ПО КАТЕГОРИЯ", "cyan");
-                MCP.PrintNL(" 3. ТЪРСИ РЕЦЕПТИ ПО ПРОДУКТ", "cyan");
-                MCP.PrintNL(" 4. ТЪРСИ РЕЦЕПТИ ПО МНОЖЕСТВО ПРОДУКТИ", "cyan");
-                MCP.PrintNL(" 5. ДОБАВИ НОВА РЕЦЕПТА", "cyan");
-                MCP.PrintNL(" 6. РЕДАКТИРАЙ РЕЦЕПТА", "cyan");
-                MCP.PrintNL(" 7. ИЗТРИЙ РЕЦЕПТА", "cyan");
-                MCP.PrintNL(" 8. ИЗХОД", "cyan");
-
-                MCP.Print("Въведете номер на команда (1-8): ", "cyan");
-
-                choice = int.Parse(Console.ReadLine());
-                switch (choice)
+                Console.OutputEncoding = Encoding.UTF8;
+                bool exit = false;
+                int choice;
+                while (!exit)
                 {
-                    case 1:
-                        ShowAllRecipes();
-                        break;
+                    MCP.PrintNL(" " + new string('*', 101), "green");
+                    MCP.PrintNL(" *" + new string(' ', 99) + "*", "green");
+                    MCP.PrintNL(" *" + new string(' ', 41) + "Каталог с рецепти".ToUpper() + new string(' ', 41) + "*", "green");
+                    MCP.PrintNL(" *" + new string(' ', 99) + "*", "green");
+                    MCP.PrintNL(" " + new string('*', 101), "green");
 
-                    case 2:
-                        SearchRecipeByCategory();
-                        break;
 
-                    case 3:
-                        SearchRecipeByIngredient();
-                        break;
+                    MCP.PrintNL(" 1. ПОКАЖИ ВСИЧКИ РЕЦЕПТИ", "cyan");
+                    MCP.PrintNL(" 2. ТЪРСИ РЕЦЕПТИ ПО КАТЕГОРИЯ", "cyan");
+                    MCP.PrintNL(" 3. ТЪРСИ РЕЦЕПТИ ПО ПРОДУКТ", "cyan");
+                    MCP.PrintNL(" 4. ТЪРСИ РЕЦЕПТИ ПО МНОЖЕСТВО ПРОДУКТИ", "cyan");
+                    MCP.PrintNL(" 5. ДОБАВИ НОВА РЕЦЕПТА", "cyan");
+                    MCP.PrintNL(" 6. РЕДАКТИРАЙ РЕЦЕПТА", "cyan");
+                    MCP.PrintNL(" 7. ИЗТРИЙ РЕЦЕПТА", "cyan");
+                    MCP.PrintNL(" 8. ИЗХОД", "cyan");
 
-                    case 4:
-                        SearchRecipesByMultipleIngredients();
-                        break;
+                    MCP.Print("Въведете номер на команда (1-8): ", "cyan");
 
-                    case 5:
-                        AddNewRecipe();
-                        break;
+                    choice = int.Parse(Console.ReadLine());
+                    switch (choice)
+                    {
+                        case 1:
+                            ShowAllRecipes();
+                            break;
 
-                    case 6:
-                        UpdateRecipe();
-                        break;
+                        case 2:
+                            SearchRecipeByCategory();
+                            break;
 
-                    case 7:
-                        DeleteRecipe();
-                        break;
-                    case 8:
-                        exit = true;
-                        break;
-                    default:
-                        MCP.PrintNL("Невалидна команда!","red");                     
-                        break;
+                        case 3:
+                            SearchRecipeByIngredient();
+                            break;
 
+                        case 4:
+                            SearchRecipesByMultipleIngredients();
+                            break;
+
+                        case 5:
+                            AddNewRecipe();
+                            break;
+
+                        case 6:
+                            UpdateRecipe();
+                            break;
+
+                        case 7:
+                            DeleteRecipe();
+                            break;
+                        case 8:
+                            exit = true;
+                            break;
+                        default:
+                            MCP.PrintNL("Невалидна команда!", "red");
+                            break;
+
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                MCP.PrintNL("Невалидна команда!(Нямаш мярка!!!)", "red");
+                ShowMenu();
             }
         }
 
