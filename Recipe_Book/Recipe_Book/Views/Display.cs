@@ -142,15 +142,15 @@ namespace Recipe_Book.Views
                 var ingredients = ingredientService.GetAllIngredients();
                 foreach (var ingredient in ingredients)
                 {
-                    MCP.PrintNL($"{ingredient.Id}. {ingredient.Name}", "yellow");
+                    MCP.PrintNL($"{ingredients.IndexOf(ingredient)+1}. {ingredient.Name}", "yellow");
                 }
-                MCP.Print("Въведете Id на съставката: ", "yellow");
-                int choice = int.Parse(Console.ReadLine());
-                if (!ingredients.Select(i => i.Id).Contains(choice))
+                MCP.Print("Въведете номер на съставката: ", "yellow");
+                int choice = int.Parse(Console.ReadLine())-1;
+                if (ingredients.ElementAtOrDefault(choice) == default)
                 {
                     throw new Exception();
                 }
-                var recipes = recipeService.GetRecipesByIngredient(choice);
+                var recipes = recipeService.GetRecipesByIngredient(ingredients[choice]);
                 if (recipes.Count == 0)
                 {
                     MCP.PrintNL("Няма рецепти с тази съставка!", "yellow");
@@ -173,24 +173,24 @@ namespace Recipe_Book.Views
                 var ingredients = ingredientService.GetAllIngredients();
                 foreach (var ingredient in ingredients)
                 {
-                    MCP.PrintNL($"{ingredient.Id}. {ingredient.Name}", "yellow");
+                    MCP.PrintNL($"{ingredients.IndexOf(ingredient)+1}. {ingredient.Name}", "yellow");
                 }
-                List<int> ingredientIds = new List<int>();
+                List<Ingredient> chosenIngredients = new List<Ingredient>();
                 while (true)
                 {
-                    MCP.Print("Въведете Id на съставката(или оставете празно за край): ", "yellow");
+                    MCP.Print("Въведете номер на съставката(или оставете празно за край): ", "yellow");
                     string choice = Console.ReadLine();
                     if(string.IsNullOrEmpty(choice)) break;
 
-                    int ingredientId = int.Parse(choice);
-                    if (!ingredients.Select(i => i.Id).Contains(ingredientId))
+                    int ingredientNum = int.Parse(choice)+1;
+                    if (ingredients.ElementAtOrDefault(ingredientNum) == default)
                     {
                         throw new Exception();
                     }
-                    ingredientIds.Add(ingredientId);
+                    chosenIngredients.Add(ingredients[ingredientNum]);
                 }
 
-                var recipes = recipeService.GetRecipesByMultipleIngredients(ingredientIds);
+                var recipes = recipeService.GetRecipesByMultipleIngredients(chosenIngredients);
                 if (recipes.Count == 0)
                 {
                     MCP.PrintNL("Няма рецепти с тези съставки!", "yellow");
@@ -257,16 +257,16 @@ namespace Recipe_Book.Views
                             var currentIngredients = ingredientService.GetAllIngredients();
                             foreach (var i in currentIngredients)
                             {
-                                Console.WriteLine($"{i.Id}. {i.Name}");
+                                Console.WriteLine($"{currentIngredients.IndexOf(i)+1}. {i.Name}");
                             }
                             
-                            Console.Write("Изберете Id на съставката (или остави празно за стъпка назад): ");
+                            Console.Write("Изберете номер на съставката (или остави празно за стъпка назад): ");
                             if (!int.TryParse(Console.ReadLine(),out int ingredientId))
                             {
                                 break;
                             }
-                           
-                            ingredientIds.Add(ingredientId);
+
+                            ingredientIds.Add(currentIngredients[ingredientId-1].Id);
                             
                             unitIds.Add(ChooseUnit());
 
@@ -328,7 +328,7 @@ namespace Recipe_Book.Views
                 MCP.Print("Въведи id на рецептата, което служи за редакция: ", "yellow");
                 int id = int.Parse(Console.ReadLine());
 
-                Recipe recipe = recipeService.GetRecipeById(id);
+                Recipe recipe = recipeService.GetRecipeById(recipeService.GetAllRecipes()[id-1].Id);
                 if (recipe == null)
                 {
                     MCP.PrintNL("Рецептата с това ID не е намерена!", "yellow");
@@ -394,15 +394,15 @@ namespace Recipe_Book.Views
                             var recipreIngredients = ingredientService.GetIngredientsByRecipe(recipe);
                             foreach (var i in recipreIngredients)
                             {
-                                Console.WriteLine($"{i.Id}. {i.Name}");
+                                Console.WriteLine($"{recipreIngredients.IndexOf(i) + 1}. {i.Name}");
                             }
-                            Console.Write("Изберете Id на съставката: ");
+                            Console.Write("Изберете номер на съставката: ");
                             int ingredientId = int.Parse(Console.ReadLine());
-                            if (recipreIngredients.Select(i => i.Id).Any(i=> i == ingredientId) == null)
+                            if (recipreIngredients.ElementAtOrDefault(ingredientId) == default)
                             {
                                 MCP.PrintNL("Невалидно Id!", "red");
                             }
-                            ingredientService.DeleteIngredient(ingredientId);
+                            ingredientService.DeleteIngredient(recipreIngredients[ingredientId-1].Id);
                             break;
 
                         case 2:
@@ -447,7 +447,7 @@ namespace Recipe_Book.Views
                 MCP.Print("Въведи id, което служи за изтриване на рецепта: ", "red");
                 int id = int.Parse(Console.ReadLine());
 
-                recipeService.DeleteRecipe(id);
+                recipeService.DeleteRecipe(recipeService.GetAllRecipes()[id - 1].Id);
                 MCP.PrintNL("Успешно изтрита рецепта!", "green");
             }
             catch (Exception)
@@ -464,7 +464,7 @@ namespace Recipe_Book.Views
             foreach (var recipe in recipes)
             {
                 print.PrintNL(new string('-', maxLength));
-                print.PrintNL($"ID: {recipe.Id}");
+                print.PrintNL($"ID: {recipes.IndexOf(recipe)+1}");
                 print.PrintNL($"Име: {recipe.Name}");
                 print.PrintNL($"Начин на приготвяне: {recipe.Description}");
                 print.PrintNL($"Автор: {recipe.Author}");

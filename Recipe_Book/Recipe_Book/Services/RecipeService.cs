@@ -55,18 +55,18 @@ namespace Recipe_Book.Services
                 .Where(r => r.CategoryId == categoryId)
                 .ToList();
         }
-        public List<Recipe> GetRecipesByIngredient(int ingredientId)
+        public List<Recipe> GetRecipesByIngredient(Ingredient ingredient)
         {
             return _context.RecipeIngredients
-             .Where(ri => ri.Ingredient.Id == ingredientId)
+             .Where(ri => ri.Ingredient == ingredient)
              .Select(ri => ri.Recipe)
              .Distinct()
              .ToList();
         }
-        public List<Recipe> GetRecipesByMultipleIngredients(List<int> ingredientIds)
+        public List<Recipe> GetRecipesByMultipleIngredients(List<Ingredient> ingredients)
         {
             return _context.Recipes
-                .Where(r => r.RecipeIngredients.Any(ri => ingredientIds.Contains(ri.Ingredient.Id)))
+                .Where(r => r.RecipeIngredients.Any(ri => ingredients.Contains(ri.Ingredient)))
                 .ToList();
         }
     }
