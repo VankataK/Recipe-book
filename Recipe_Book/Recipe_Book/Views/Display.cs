@@ -6,7 +6,6 @@ using CustomPrint;
 
 namespace Recipe_Book.Views
 {
-
     public class Display
     {
 
