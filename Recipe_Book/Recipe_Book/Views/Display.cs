@@ -99,7 +99,7 @@ namespace Recipe_Book.Views
 
         public void ShowAllRecipes()
         {
-            MCP.PrintNL("Показване на списъка с всички рецепти: ", "red");
+            MCP.PrintNL("Показване на списъка с всички рецепти: ", "green");
             var recipes = recipeService.GetAllRecipes();
             if (recipes.Count == 0)
             {
@@ -136,7 +136,7 @@ namespace Recipe_Book.Views
             }
             catch (Exception)
             {
-                MCP.Print("Невалидно Id!", "red");
+                MCP.PrintNL("Невалидно Id!", "red");
             }
         }
 
@@ -167,7 +167,7 @@ namespace Recipe_Book.Views
             }
             catch (Exception)
             {
-                MCP.Print("Невалидно Id!", "red");
+                MCP.PrintNL("Невалидно Id!", "red");
             }
         }
 
@@ -207,7 +207,7 @@ namespace Recipe_Book.Views
             }
             catch (Exception)
             {
-                MCP.Print("Невалидно Id!", "red");
+                MCP.PrintNL("Невалидно Id!", "red");
             }
         }
 
@@ -465,7 +465,7 @@ namespace Recipe_Book.Views
 
         public void ShowRecipesInColor(List<Recipe> recipes, string color)
         {
-            int maxLength = recipes.Select(r=> r.Description.Length).Max()+30;
+            int maxLength = recipes.Select(r => r.Description.Length).Max() + 30;
             MCP print = new MCP(color, maxLength, "left", "|", "|");
             foreach (var recipe in recipes)
             {

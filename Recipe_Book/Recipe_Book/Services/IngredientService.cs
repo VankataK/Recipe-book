@@ -14,6 +14,7 @@ namespace Recipe_Book.Services
 
         public void AddIngredient(Ingredient ingredient)
         {
+            ingredient.Name = ingredient.Name.ToLower();
             _context.Ingredients.Add(ingredient);
             _context.SaveChanges();
         }
@@ -37,7 +38,7 @@ namespace Recipe_Book.Services
         }
         public List<Ingredient> GetAllIngredients()
         {
-            return _context.Ingredients.ToList();
+            return _context.Ingredients.OrderBy(i => i.Name).ToList();
         }
 
     }

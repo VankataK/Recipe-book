@@ -56,6 +56,7 @@ namespace Recipe_Book.Services
         public List<Recipe> GetRecipesByCategory(int categoryId)
         {
             return _context.Recipes
+                .Include(r => r.Category)
                 .Where(r => r.CategoryId == categoryId)
                 .ToList();
         }
