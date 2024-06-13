@@ -177,10 +177,12 @@ namespace Recipe_Book.Views
             {
                 MCP.PrintNL("-----Съставки-----", "yellow");
                 var ingredients = ingredientService.GetAllIngredients();
+
                 foreach (var ingredient in ingredients)
                 {
                     MCP.PrintNL($"{ingredients.IndexOf(ingredient)+1}. {ingredient.Name}", "yellow");
                 }
+
                 List<Ingredient> chosenIngredients = new List<Ingredient>();
                 while (true)
                 {
@@ -188,11 +190,12 @@ namespace Recipe_Book.Views
                     string choice = Console.ReadLine();
                     if(string.IsNullOrEmpty(choice)) break;
 
-                    int ingredientNum = int.Parse(choice)+1;
-                    if (ingredients.ElementAtOrDefault(ingredientNum) == default)
-                    {
-                        throw new Exception();
-                    }
+                    int ingredientNum = int.Parse(choice)-1;
+                  
+                    //if (ingredients.ElementAtOrDefault(ingredientNum) == default)
+                    //{
+                    //    throw new Exception();
+                    //}
                     chosenIngredients.Add(ingredients[ingredientNum]);
                 }
 
@@ -205,8 +208,9 @@ namespace Recipe_Book.Views
                 ShowRecipesInColor(recipes, "yellow");
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 MCP.PrintNL("Невалидно Id!", "red");
             }
         }

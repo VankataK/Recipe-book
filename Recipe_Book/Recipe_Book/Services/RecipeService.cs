@@ -70,9 +70,35 @@ namespace Recipe_Book.Services
         }
         public List<Recipe> GetRecipesByMultipleIngredients(List<Ingredient> ingredients)
         {
-            return _context.Recipes
-                .Where(r => r.RecipeIngredients.Any(ri => ingredients.Contains(ri.Ingredient)))
-                .ToList();
+            var recipes = GetAllRecipes();
+            List<Recipe> result = new List<Recipe>();
+            foreach (var recipe in recipes)
+            {
+                if (Check(recipe, ingredients))
+                {
+                    result.Add(recipe);
+                }
+            }
+            return result;
         }
+
+
+        private Func<Recipe, List<Ingredient>, bool> Check = (recipe, ing) =>
+        {
+
+            foreach (var i in ing)
+            {
+                bool isOK = false;
+                foreach (var ii in recipe.RecipeIngredients)
+                {
+                    if (i.Name == ii.Ingredient.Name) { isOK = true; break; }
+                }
+
+                if (!isOK) return false;
+            }
+
+            return true;
+        };
+
     }
 }
