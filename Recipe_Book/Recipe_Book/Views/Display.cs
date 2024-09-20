@@ -469,7 +469,7 @@ namespace Recipe_Book.Views
 
         public void ShowRecipesInColor(List<Recipe> recipes, string color)
         {
-            int maxLength = recipes.Select(r => r.Description.Length).Max() + 30;
+            int maxLength = recipeService.GetAllRecipes().Select(r => r.Description.Length).Max()+30;
             MCP print = new MCP(color, maxLength, "left", "|", "|");
             foreach (var recipe in recipes)
             {
